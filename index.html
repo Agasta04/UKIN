@@ -455,7 +455,7 @@
               data-nav="sim-stack"
               class="nav-btn px-3.5 xl:px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-brandDarkCard transition whitespace-nowrap"
             >
-              <i class="fa-solid fa-layer-group mr-1.5"></i> Simulasi Stack
+              <i class="fa-solid fa-layer-group mr-1.5"></i> Simulasi Stack &amp; Kasus D
             </button>
             <button
               data-nav="sim-queue"
@@ -467,7 +467,7 @@
               data-nav="sim-array"
               class="nav-btn px-3.5 xl:px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-brandDarkCard transition whitespace-nowrap"
             >
-              <i class="fa-solid fa-table-cells mr-1.5"></i> Array &amp; Kasus D
+              <i class="fa-solid fa-table-cells mr-1.5"></i> Simulasi Array / List
             </button>
             <button
               data-nav="lkpd"
@@ -518,7 +518,7 @@
           class="nav-btn block w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-slate-200 hover:bg-brandDark"
         >
           <i class="fa-solid fa-layer-group mr-2 text-brandGold"></i> Tumpukan
-          (Stack - LIFO)
+          (Stack &amp; Kasus D)
         </button>
         <button
           data-nav="sim-queue"
@@ -531,8 +531,8 @@
           data-nav="sim-array"
           class="nav-btn block w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-slate-200 hover:bg-brandDark"
         >
-          <i class="fa-solid fa-table-cells mr-2 text-amber-400"></i> Array
-          &amp; Kasus D (Word)
+          <i class="fa-solid fa-table-cells mr-2 text-amber-400"></i> Array / List
+          (Indeks O(1))
         </button>
         <button
           data-nav="lkpd"
@@ -1478,34 +1478,36 @@
       </section>
 
       <!-- ========================================================================= -->
-      <!-- SECTION 3: SIMULASI TUMPUKAN (STACK - LIFO) — KLIK TANPA KETIK            -->
+      <!-- SECTION 3: SIMULASI TUMPUKAN (STACK - LIFO) & KASUS D                     -->
       <!-- ========================================================================= -->
-      <section id="sim-stack" class="page-section">
-        <div
-          class="flex flex-wrap gap-4 justify-between items-center mb-8 bg-brandDarkCard p-6 rounded-3xl neo-border"
-        >
-          <div>
-            <span class="font-mono text-xs font-bold text-brandGold uppercase"
-              >SIMULASI INTERAKTIF STACK</span
-            >
-            <h2 class="text-2xl sm:text-3xl font-black text-white font-display">
-              Tumpukan Piring &amp; Buku (LIFO)
-            </h2>
-            <p class="text-slate-300 text-xs sm:text-sm mt-1">
-              Tinggal <strong>ketuk objek</strong> untuk menambah ke tumpukan
-              (Push) atau <strong>ketuk tombol Ambil</strong> untuk mengeluarkan
-              teratas (Pop).
-            </p>
-          </div>
-          <button
-            onclick="resetStackSim()"
-            class="text-xs bg-brandDark hover:bg-brandDarkBorder px-4 py-2.5 rounded-full font-bold text-slate-200 border border-brandDarkBorder flex items-center gap-2"
+      <section id="sim-stack" class="page-section space-y-10">
+        <!-- 1. SIMULATOR TUMPUKAN PIRING & BUKU -->
+        <div class="bg-brandDarkCard p-6 md:p-8 rounded-3xl neo-border space-y-6">
+          <div
+            class="flex flex-wrap gap-4 justify-between items-center pb-4 border-b border-brandDarkBorder"
           >
-            <i class="fa-solid fa-rotate-left text-brandGold"></i> Reset Rak
-          </button>
-        </div>
+            <div>
+              <span class="font-mono text-xs font-bold text-brandGold uppercase"
+                >SIMULASI INTERAKTIF STACK (LIFO) — ANALOGI 1</span
+              >
+              <h2 class="text-2xl sm:text-3xl font-black text-white font-display">
+                Tumpukan Piring &amp; Buku
+              </h2>
+              <p class="text-slate-300 text-xs sm:text-sm mt-1">
+                Tinggal <strong>ketuk objek</strong> untuk menambah ke tumpukan
+                (Push) atau <strong>ketuk tombol Ambil</strong> untuk mengeluarkan
+                teratas (Pop).
+              </p>
+            </div>
+            <button
+              onclick="resetStackSim()"
+              class="text-xs bg-brandDark hover:bg-brandDarkBorder px-4 py-2.5 rounded-full font-bold text-slate-200 border border-brandDarkBorder flex items-center gap-2"
+            >
+              <i class="fa-solid fa-rotate-left text-brandGold"></i> Reset Rak
+            </button>
+          </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <!-- Panel Pilihan Objek Cepat (Tinggal Klik) -->
           <div class="lg:col-span-5 space-y-6">
             <div class="bg-brandDarkCard p-6 rounded-3xl neo-border space-y-4">
@@ -1727,7 +1729,128 @@
             </div>
           </div>
         </div>
-      </section>
+      </div>
+
+      <!-- 2. SIMULATOR KASUS D MICROSOFT WORD UNDO (LIFO) -->
+      <div
+        id="kasus-d-simulator"
+        class="bg-brandDarkCard p-8 rounded-3xl neo-border space-y-6"
+      >
+        <div
+          class="flex flex-wrap justify-between items-center pb-4 border-b border-brandDarkBorder gap-3"
+        >
+          <div>
+            <span class="font-mono text-xs font-bold text-brandBlue uppercase"
+              >SIMULASI INTERAKTIF STACK — ANALOGI 2 (VERIFIKASI LKPD AKTIVITAS 2)</span
+            >
+            <h2
+              class="text-2xl sm:text-3xl font-black text-white font-display"
+            >
+              Kasus D: Fitur Undo (Ctrl+Z) Microsoft Word
+            </h2>
+            <p class="text-slate-300 text-xs sm:text-sm mt-1">
+              Membuktikan secara visual bahwa riwayat pengetikan disimpan dalam struktur <strong>Stack (LIFO)</strong>.
+            </p>
+          </div>
+          <span class="pill-blue px-3.5 py-1 text-xs font-mono"
+            >Prinsip Stack (LIFO)</span
+          >
+        </div>
+
+        <div
+          class="p-4 bg-brandDark rounded-2xl neo-border text-xs text-slate-300 leading-relaxed"
+        >
+          <strong>Skenario Kasus D (RPP Aktivitas 2):</strong> Andi mengetik kata
+          <code>"INFORMATIKA"</code> $\rightarrow$ salah ketik
+          <code>"INFORMATIKU"</code> $\rightarrow$ menekan
+          <code>Ctrl+Z</code> (Undo) $\rightarrow$ menambah kata
+          <code>"SERU"</code> menjadi <code>"INFORMATIKA SERU"</code>.
+        </div>
+
+        <!-- Lembar Word & Stack Monitor -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div
+            class="lg:col-span-7 bg-brandDark p-6 rounded-3xl neo-border space-y-4"
+          >
+            <!-- Toolbar Word Tiruan -->
+            <div
+              class="flex justify-between items-center pb-3 border-b border-brandDarkBorder text-xs font-mono"
+            >
+              <span class="text-brandBlue font-bold"
+                ><i class="fa-solid fa-file-word mr-1.5"></i>
+                DokumenTugas.docx</span
+              >
+              <span
+                id="badgeWordStep"
+                class="pill-gold px-2.5 py-0.5 text-[10px]"
+                >Langkah 1: Kata Dasar</span
+              >
+            </div>
+
+            <!-- Lembar Kertas Putih -->
+            <div
+              class="p-8 bg-white rounded-2xl min-h-[140px] flex items-center justify-center text-center shadow-inner"
+            >
+              <span
+                id="screenWordText"
+                class="font-mono text-3xl font-black text-slate-900 tracking-wider"
+              >
+                INFORMATIKA
+              </span>
+            </div>
+
+            <!-- 4 Tombol Skenario Cukup Klik -->
+            <div class="grid grid-cols-2 gap-2.5 pt-2">
+              <button
+                onclick="clickWordStep(2)"
+                class="btn-outline text-xs py-2.5"
+              >
+                1. Salah Ketik "INFORMATIKU"
+              </button>
+              <button
+                onclick="clickWordStep(3)"
+                class="btn-blue text-xs py-2.5"
+              >
+                <i class="fa-solid fa-rotate-left mr-1"></i> 2. Tekan Undo
+                (Ctrl+Z)
+              </button>
+              <button
+                onclick="clickWordStep(4)"
+                class="btn-primary text-xs py-2.5 col-span-2"
+              >
+                3. Tambah Kata "SERU" (Selesai)
+              </button>
+            </div>
+          </div>
+
+          <!-- Monitor Stack Memori Word -->
+          <div
+            class="lg:col-span-5 bg-brandDark p-6 rounded-3xl neo-border space-y-4"
+          >
+            <div
+              class="flex justify-between items-center pb-2 border-b border-brandDarkBorder"
+            >
+              <span
+                class="text-xs font-mono font-bold uppercase text-brandBlue"
+                >Monitor Stack Undo</span
+              >
+              <span class="text-[10px] font-mono text-slate-400">LIFO</span>
+            </div>
+
+            <div id="wordStackElements" class="space-y-2 py-2 min-h-[160px]">
+              <!-- Stack actions rendered here -->
+            </div>
+
+            <div
+              id="wordStepExplanation"
+              class="p-3 bg-brandDarkCard rounded-xl neo-border text-xs font-mono text-brandGold"
+            >
+              Langkah 1: Teks "INFORMATIKA" tersimpan di dokumen.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
       <!-- ========================================================================= -->
       <!-- SECTION 4: SIMULASI ANTREAN (QUEUE - FIFO) — KLIK TANPA KETIK             -->
@@ -1978,23 +2101,26 @@
       </section>
 
       <!-- ========================================================================= -->
-      <!-- SECTION 5: SIMULASI ARRAY & KASUS D (WORD UNDO) — KLIK TANPA KETIK        -->
+      <!-- SECTION 5: SIMULASI ARRAY & LIST (DIRECT ACCESS & REMEDIAL NILAI)         -->
       <!-- ========================================================================= -->
       <section id="sim-array" class="page-section space-y-10">
-        <!-- 1. SIMULATOR ARRAY LOKER SEKOLAH -->
-        <div class="bg-brandDarkCard p-8 rounded-3xl neo-border space-y-6">
+        <!-- 1. SIMULATOR ARRAY 1: LOKER SEKOLAH -->
+        <div class="bg-brandDarkCard p-6 md:p-8 rounded-3xl neo-border space-y-6">
           <div
             class="flex flex-wrap justify-between items-center pb-4 border-b border-brandDarkBorder gap-3"
           >
             <div>
               <span class="font-mono text-xs font-bold text-brandGold uppercase"
-                >ANALISIS ARRAY LANGSUNG</span
+                >SIMULASI ARRAY / LIST — ANALOGI 1 (DIRECT ACCESS O(1))</span
               >
               <h2
                 class="text-2xl sm:text-3xl font-black text-white font-display"
               >
-                Deretan Loker Sekolah (Direct Access)
+                Deretan Loker Sekolah
               </h2>
+              <p class="text-slate-300 text-xs sm:text-sm mt-1">
+                Akses barang langsung menggunakan nomor loker (indeks) tanpa harus membuka loker lain.
+              </p>
             </div>
             <span class="pill-gold px-3.5 py-1 text-xs font-mono"
               >Indeks [0] s.d. [4]</span
@@ -2003,8 +2129,7 @@
 
           <p class="text-sm text-slate-300">
             Tinggal <strong>ketuk pintu loker</strong> di bawah untuk membuka
-            dan melihat barang di dalamnya secara langsung tanpa harus
-            membongkar loker lain:
+            dan melihat barang di dalamnya secara langsung:
           </p>
 
           <!-- Deretan Loker Sekolah -->
@@ -2017,123 +2142,142 @@
             class="p-4 bg-brandDark rounded-2xl neo-border text-xs font-mono text-brandGold"
           >
             🔑 Ketuk tombol <strong>Buka Loker</strong> untuk mencoba pembuktian
-            Direct Access $O(1)$!
+            Direct Access O(1)!
           </div>
         </div>
 
-        <!-- 2. SIMULATOR KASUS D MICROSOFT WORD UNDO REALISTIS -->
+        <!-- 2. SIMULATOR ARRAY 2: PENGELOLAAN DAFTAR NILAI SISWA (BUKU SISWA HAL. 31) -->
         <div
-          id="kasus-d-simulator"
-          class="bg-brandDarkCard p-8 rounded-3xl neo-border space-y-6"
+          id="array-nilai-simulator"
+          class="bg-brandDarkCard p-6 md:p-8 rounded-3xl neo-border space-y-6"
         >
           <div
             class="flex flex-wrap justify-between items-center pb-4 border-b border-brandDarkBorder gap-3"
           >
             <div>
-              <span class="font-mono text-xs font-bold text-brandBlue uppercase"
-                >VERIFIKASI LKPD AKTIVITAS 2</span
+              <span class="font-mono text-xs font-bold text-amber-400 uppercase"
+                >SIMULASI ARRAY / LIST — ANALOGI 2 (STUDI KASUS BUKU SISWA HAL. 31)</span
               >
               <h2
                 class="text-2xl sm:text-3xl font-black text-white font-display"
               >
-                Kasus D: Fitur Undo (Ctrl+Z) Microsoft Word
+                Pengelolaan Daftar Nilai Siswa
               </h2>
+              <p class="text-slate-300 text-xs sm:text-sm mt-1">
+                Membuktikan kemudahan <strong>Direct Access</strong> &amp; <strong>Modifikasi Elemen</strong> pada indeks tertentu tanpa mengganggu elemen lainnya.
+              </p>
             </div>
-            <span class="pill-blue px-3.5 py-1 text-xs font-mono"
-              >Prinsip Stack LIFO</span
+            <span class="pill-gold px-3.5 py-1 text-xs font-mono"
+              >Array Nilai Siswa</span
             >
           </div>
 
+          <!-- Deskripsi Skenario Buku Siswa Hal 31 -->
           <div
             class="p-4 bg-brandDark rounded-2xl neo-border text-xs text-slate-300 leading-relaxed"
           >
-            <strong>Skenario Kasus D:</strong> Andi mengetik kata
-            <code>"INFORMATIKA"</code> $\rightarrow$ salah ketik
-            <code>"INFORMATIKU"</code> $\rightarrow$ menekan
-            <code>Ctrl+Z</code> (Undo) $\rightarrow$ menambah kata
-            <code>"SERU"</code> menjadi <code>"INFORMATIKA SERU"</code>.
+            <strong>Skenario Kasus (Buku Siswa Informatika Hal. 31):</strong> Guru menyimpan 5 nilai siswa dalam Array:
+            <code>nilai = [80, 75, 90, 85, 88]</code>. Budi pada indeks <code>[1]</code> awalnya bernilai <code>75</code>. Setelah mengikuti remedial, nilainya naik menjadi <code>85</code>. Pada struktur <strong>Array</strong>, guru cukup menjalankan perintah <code>nilai[1] = 85</code>. Data siswa lain pada indeks [0], [2], [3], [4] sama sekali tidak tergeser atau terganggu!
           </div>
 
-          <!-- Lembar Word & Stack Monitor -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Visualisasi Slot Array Nilai -->
+          <div class="space-y-2">
+            <div class="flex justify-between items-center text-xs font-mono text-slate-400 px-1">
+              <span><i class="fa-solid fa-memory mr-1 text-amber-400"></i> Alamat Memori Array Berurutan (Contiguous Memory)</span>
+              <span id="arrayElementCountBadge" class="text-amber-300 font-bold">5 Elemen</span>
+            </div>
             <div
-              class="lg:col-span-7 bg-brandDark p-6 rounded-3xl neo-border space-y-4"
+              id="arrayNilaiContainer"
+              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3"
             >
-              <!-- Toolbar Word Tiruan -->
-              <div
-                class="flex justify-between items-center pb-3 border-b border-brandDarkBorder text-xs font-mono"
-              >
-                <span class="text-brandBlue font-bold"
-                  ><i class="fa-solid fa-file-word mr-1.5"></i>
-                  DokumenTugas.docx</span
-                >
-                <span
-                  id="badgeWordStep"
-                  class="pill-gold px-2.5 py-0.5 text-[10px]"
-                  >Langkah 1: Kata Dasar</span
-                >
-              </div>
+              <!-- Rendered by JS -->
+            </div>
+          </div>
 
-              <!-- Lembar Kertas Putih -->
-              <div
-                class="p-8 bg-white rounded-2xl min-h-[140px] flex items-center justify-center text-center shadow-inner"
-              >
-                <span
-                  id="screenWordText"
-                  class="font-mono text-3xl font-black text-slate-900 tracking-wider"
-                >
-                  INFORMATIKA
-                </span>
-              </div>
-
-              <!-- 4 Tombol Skenario Cukup Klik -->
-              <div class="grid grid-cols-2 gap-2.5 pt-2">
+          <!-- Panel Kontrol Aksi Array Cukup Klik -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <!-- Aksi 1: Skenario Cepat Remedial Hal 31 -->
+            <div class="bg-brandDark p-5 rounded-2xl neo-border space-y-3">
+              <span class="text-xs font-mono font-bold text-brandGold uppercase flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-brandGold"></i> Skenario Cepat Buku Siswa
+              </span>
+              <p class="text-xs text-slate-300">
+                Klik tombol di bawah untuk melihat bagaimana nilai remedial Budi pada indeks [1] langsung diubah secara instan:
+              </p>
+              <div class="flex flex-wrap gap-2">
                 <button
-                  onclick="clickWordStep(2)"
-                  class="btn-outline text-xs py-2.5"
+                  type="button"
+                  onclick="jalankanSkenarioRemedialArray()"
+                  class="btn-primary text-xs py-2.5 px-4 flex items-center gap-2"
                 >
-                  1. Salah Ketik "INFORMATIKU"
+                  <i class="fa-solid fa-graduation-cap"></i> Jalankan: nilai[1] = 85 (Remedial)
                 </button>
                 <button
-                  onclick="clickWordStep(3)"
-                  class="btn-blue text-xs py-2.5"
+                  type="button"
+                  onclick="resetArrayNilaiDemo()"
+                  class="btn-outline text-xs py-2.5 px-3 flex items-center gap-1.5"
                 >
-                  <i class="fa-solid fa-rotate-left mr-1"></i> 2. Tekan Undo
-                  (Ctrl+Z)
-                </button>
-                <button
-                  onclick="clickWordStep(4)"
-                  class="btn-primary text-xs py-2.5 col-span-2"
-                >
-                  3. Tambah Kata "SERU" (Selesai)
+                  <i class="fa-solid fa-rotate-left"></i> Reset Awal
                 </button>
               </div>
             </div>
 
-            <!-- Monitor Stack Memori Word -->
-            <div
-              class="lg:col-span-5 bg-brandDark p-6 rounded-3xl neo-border space-y-4"
-            >
-              <div
-                class="flex justify-between items-center pb-2 border-b border-brandDarkBorder"
-              >
-                <span
-                  class="text-xs font-mono font-bold uppercase text-brandBlue"
-                  >Monitor Stack Undo</span
+            <!-- Aksi 2: Akses Langsung Indeks (Direct Read) -->
+            <div class="bg-brandDark p-5 rounded-2xl neo-border space-y-3">
+              <span class="text-xs font-mono font-bold text-brandBlue uppercase flex items-center gap-2">
+                <i class="fa-solid fa-crosshairs text-brandBlue"></i> Uji Direct Access O(1)
+              </span>
+              <p class="text-xs text-slate-300">
+                Pilih indeks untuk membaca nilai seketika tanpa harus melewati elemen lain:
+              </p>
+              <div class="flex flex-wrap items-center gap-1.5" id="arrayIndexButtons">
+                <!-- Rendered by JS buttons [0], [1], [2], ... -->
+              </div>
+              <div class="pt-1 flex items-center gap-2">
+                <button
+                  type="button"
+                  onclick="tambahSiswaArray()"
+                  class="text-xs bg-brandDarkBorder hover:bg-slate-700 text-amber-300 font-bold px-3 py-1.5 rounded-lg border border-amber-400/30 transition flex items-center gap-1.5"
                 >
-                <span class="text-[10px] font-mono text-slate-400">LIFO</span>
+                  <i class="fa-solid fa-plus"></i> Tambah Siswa Baru (Append)
+                </button>
               </div>
+            </div>
+          </div>
 
-              <div id="wordStackElements" class="space-y-2 py-2 min-h-[160px]">
-                <!-- Stack actions rendered here -->
-              </div>
+          <!-- Live Analisis Edukatif -->
+          <div
+            id="arrayNarrativeFeedback"
+            class="p-4 bg-brandDark rounded-2xl neo-border text-xs font-mono text-brandGold leading-relaxed"
+          >
+            💡 <strong>Analisis Struktur Data:</strong> Pada Array, kita dapat membaca atau mengubah elemen langsung berdasarkan nomor indeksnya dengan kompleksitas waktu O(1). Berbeda dengan Stack atau Queue yang dibatasi oleh aturan LIFO atau FIFO!
+          </div>
 
-              <div
-                id="wordStepExplanation"
-                class="p-3 bg-brandDarkCard rounded-xl neo-border text-xs font-mono text-brandGold"
-              >
-                Langkah 1: Teks "INFORMATIKA" tersimpan di dokumen.
+          <!-- Komparasi Pedagogis: Array vs Stack vs Queue -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-xs">
+            <div class="p-4 bg-brandDark rounded-2xl border border-amber-500/30 space-y-1.5">
+              <div class="font-bold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-table-cells"></i> Array / List
               </div>
+              <p class="text-slate-300">
+                Akses acak langsung <code>nilai[i]</code>. Bebas ubah nilai mana saja tanpa harus membongkar elemen lain.
+              </p>
+            </div>
+            <div class="p-4 bg-brandDark rounded-2xl border border-brandGold/30 space-y-1.5">
+              <div class="font-bold text-brandGold flex items-center gap-1.5">
+                <i class="fa-solid fa-layer-group"></i> Stack (LIFO)
+              </div>
+              <p class="text-slate-300">
+                Hanya bisa mengakses elemen paling atas (TOP). Untuk ambil elemen bawah, elemen atas harus di-Pop dulu!
+              </p>
+            </div>
+            <div class="p-4 bg-brandDark rounded-2xl border border-brandBlue/30 space-y-1.5">
+              <div class="font-bold text-brandBlue flex items-center gap-1.5">
+                <i class="fa-solid fa-people-line"></i> Queue (FIFO)
+              </div>
+              <p class="text-slate-300">
+                Hanya bisa melayani elemen yang paling depan (FRONT). Elemen baru masuk selalu di paling belakang (REAR).
+              </p>
             </div>
           </div>
         </div>
@@ -3664,6 +3808,151 @@
       }
 
       /* ==========================================================
+         SIMULATOR ARRAY 2: PENGELOLAAN DAFTAR NILAI SISWA (BUKU SISWA HAL. 31)
+         ========================================================== */
+      const DEFAULT_ARRAY_NILAI = [
+        { nama: "Ahmad", nilai: 80, memory: "0x1000", status: "Tuntas" },
+        { nama: "Budi", nilai: 75, memory: "0x1004", status: "Remedial Awal" },
+        { nama: "Citra", nilai: 90, memory: "0x1008", status: "Tuntas" },
+        { nama: "Dewi", nilai: 85, memory: "0x100C", status: "Tuntas" },
+        { nama: "Eko", nilai: 88, memory: "0x1010", status: "Tuntas" }
+      ];
+
+      let arrayNilaiData = JSON.parse(JSON.stringify(DEFAULT_ARRAY_NILAI));
+
+      function renderArrayNilaiUi(highlightIdx = -1, customMsg = "") {
+        const container = document.getElementById("arrayNilaiContainer");
+        const btnBox = document.getElementById("arrayIndexButtons");
+        const badgeCount = document.getElementById("arrayElementCountBadge");
+        if (!container) return;
+
+        if (badgeCount) badgeCount.textContent = `${arrayNilaiData.length} Elemen`;
+
+        container.innerHTML = "";
+        if (btnBox) btnBox.innerHTML = "";
+
+        arrayNilaiData.forEach((item, idx) => {
+          const isHighlighted = idx === highlightIdx;
+          const isRemedialSuccess = idx === 1 && item.nilai === 85;
+
+          // Render Slot Card
+          const card = document.createElement("div");
+          card.className = `p-3.5 rounded-2xl neo-border flex flex-col justify-between transition cursor-pointer ${
+            isHighlighted
+              ? "bg-amber-500/20 border-brandGold neo-shadow-gold scale-105"
+              : isRemedialSuccess
+              ? "bg-emerald-950/40 border-emerald-500/60"
+              : "bg-brandDark hover:border-slate-500"
+          }`;
+          card.onclick = () => bacaElemenArray(idx);
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between pb-1.5 border-b border-brandDarkBorder text-[10px] font-mono">
+              <span class="font-bold text-amber-300">Indeks [${idx}]</span>
+              <span class="text-slate-400 text-[9px]">${item.memory}</span>
+            </div>
+            <div class="py-2 text-center">
+              <div class="text-xs font-semibold text-slate-300 truncate">${item.nama}</div>
+              <div class="text-2xl font-black font-mono my-1 ${
+                isRemedialSuccess ? "text-emerald-400" : isHighlighted ? "text-brandGold" : "text-white"
+              }">
+                ${item.nilai}
+              </div>
+              <span class="text-[9px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                item.nilai >= 75 ? "bg-emerald-950 text-emerald-300" : "bg-rose-950 text-rose-300"
+              }">
+                ${item.status}
+              </span>
+            </div>
+            <div class="pt-1.5 border-t border-brandDarkBorder text-center">
+              <span class="text-[10px] font-mono text-slate-400 hover:text-amber-300">
+                <i class="fa-solid fa-hand-pointer mr-1"></i> Klik Akses
+              </span>
+            </div>
+          `;
+          container.appendChild(card);
+
+          // Render direct access button
+          if (btnBox) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = `px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition ${
+              isHighlighted
+                ? "bg-brandGold text-brandDark"
+                : "bg-brandDarkCard text-slate-200 hover:bg-slate-700 border border-brandDarkBorder"
+            }`;
+            btn.innerHTML = `[${idx}] ${item.nama.substring(0, 5)}`;
+            btn.onclick = () => bacaElemenArray(idx);
+            btnBox.appendChild(btn);
+          }
+        });
+
+        if (customMsg) {
+          const feedbackEl = document.getElementById("arrayNarrativeFeedback");
+          if (feedbackEl) feedbackEl.innerHTML = customMsg;
+        }
+      }
+
+      function jalankanSkenarioRemedialArray() {
+        if (arrayNilaiData.length < 2) return;
+        // Ubah indeks 1 (Budi) dari 75 menjadi 85 persis Studi Kasus Hal 31
+        arrayNilaiData[1].nilai = 85;
+        arrayNilaiData[1].status = "Tuntas (Remedial)";
+        const msg = `
+          🎯 <strong>Skenario Buku Siswa Hal. 31 Berhasil!</strong><br/>
+          Perintah yang dieksekusi: <code>nilai[1] = 85;</code><br/>
+          <span class="text-emerald-300">Nilai Budi (indeks [1]) seketika diperbarui dari 75 menjadi 85.</span><br/>
+          Perhatikan bahwa elemen siswa lain di indeks [0], [2], [3], [4] <strong>sama sekali tidak tersentuh atau bergeser</strong>. Ini adalah bukti kekuatan Direct Access O(1) pada struktur Array!
+        `;
+        renderArrayNilaiUi(1, msg);
+        showToast("Skenario Remedial: nilai[1] berhasil diubah jadi 85!");
+      }
+
+      function bacaElemenArray(idx) {
+        if (!arrayNilaiData[idx]) return;
+        const s = arrayNilaiData[idx];
+        const msg = `
+          🔍 <strong>Direct Access O(1) pada Indeks [${idx}]:</strong><br/>
+          Perintah: <code>const siswa = nilai[${idx}];</code> &rarr; Mendapatkan <strong>${s.nama}</strong> dengan Nilai <strong>${s.nilai}</strong> (${s.status}) di alamat memori <code>${s.memory}</code>.<br/>
+          Komputer langsung melompat ke lokasi memori tersebut tanpa harus menelusuri elemen dari depan seperti pada Antrean (Queue) atau membongkar elemen teratas seperti pada Tumpukan (Stack)!
+        `;
+        renderArrayNilaiUi(idx, msg);
+      }
+
+      function tambahSiswaArray() {
+        const abjad = ["Fajar", "Gita", "Hadi", "Indah"];
+        const nextIdx = arrayNilaiData.length;
+        if (nextIdx >= 8) {
+          alert("Kapasitas demo Array dibatasi maksimal 8 elemen agar tampilan tetap rapi.");
+          return;
+        }
+        const namaBaru = abjad[(nextIdx - 5) % abjad.length] || `Siswa ${nextIdx + 1}`;
+        const hex = "0x" + (0x1000 + nextIdx * 4).toString(16).toUpperCase();
+        arrayNilaiData.push({
+          nama: namaBaru,
+          nilai: 86,
+          memory: hex,
+          status: "Tuntas"
+        });
+        const msg = `
+          ➕ <strong>Append Elemen Baru:</strong><br/>
+          Data siswa <strong>${namaBaru}</strong> ditambahkan di akhir deretan pada indeks <code>[${nextIdx}]</code> di alamat memori <code>${hex}</code>.<br/>
+          Ukuran Array kini bertambah menjadi ${arrayNilaiData.length} elemen.
+        `;
+        renderArrayNilaiUi(nextIdx, msg);
+        showToast(`Siswa ${namaBaru} ditambahkan ke Array!`);
+      }
+
+      function resetArrayNilaiDemo() {
+        arrayNilaiData = JSON.parse(JSON.stringify(DEFAULT_ARRAY_NILAI));
+        const msg = `
+          🔄 <strong>Data Array Direset:</strong> Kembali ke kondisi semula sesuai Studi Kasus Buku Siswa (5 Siswa, Budi di indeks [1] bernilai 75).
+        `;
+        renderArrayNilaiUi(-1, msg);
+        showToast("Data simulasi Array berhasil direset.");
+      }
+
+      /* ==========================================================
          SIMULATOR 4: KASUS D WORD UNDO REALISTIS
          ========================================================== */
       const wordStepScenarios = {
@@ -3989,7 +4278,7 @@
       }
 
       function navigasiKeSimulasiWord() {
-        navigateTo("sim-array");
+        navigateTo("sim-stack");
         setTimeout(() => {
           const el = document.getElementById("kasus-d-simulator");
           if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -4285,6 +4574,7 @@
         renderStackUi();
         renderQueueUi();
         renderLockersUi();
+        renderArrayNilaiUi();
         clickWordStep(1);
         renderAsesmenCards("pra", "soal-pra-container");
         renderAsesmenCards("pasca", "soal-pasca-container");
