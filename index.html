@@ -2969,6 +2969,57 @@
             </p>
           </div>
 
+          <!-- FORM IDENTITAS SISWA PESERTA ASESMEN -->
+          <div class="mb-6 bg-brandDarkCard p-5 sm:p-6 rounded-2xl neo-border space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-brandDarkBorder">
+              <span class="text-xs font-mono font-bold text-brandGold uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-user-graduate text-brandGold"></i>
+                Identitas Peserta Asesmen
+              </span>
+              <button
+                type="button"
+                onclick="aturUrlSpreadsheet()"
+                title="Hubungkan ke Google Spreadsheet Guru"
+                class="inline-flex items-center gap-1.5 px-3 py-1 bg-brandDark hover:bg-brandDarkBorder border border-brandDarkBorder text-slate-300 hover:text-white rounded-lg text-[11px] font-mono transition"
+              >
+                <i class="fa-solid fa-sheet-plastic text-emerald-400"></i>
+                <span id="labelKoneksiSheet">Integrasi Spreadsheet</span>
+              </button>
+            </div>
+            <p class="text-[11px] text-slate-400">
+              Isi data diri Anda sebelum mengerjakan tes agar nilai dan perkembangan tercatat otomatis ke daftar nilai guru:
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-1">
+              <div class="sm:col-span-6">
+                <label class="block text-[11px] font-mono text-slate-400 mb-1 font-bold">Nama Lengkap Siswa</label>
+                <input
+                  type="text"
+                  id="asesmen-nama-siswa"
+                  placeholder="Contoh: Ahmad Fauzan"
+                  class="lkpd-input w-full bg-brandDark p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                />
+              </div>
+              <div class="sm:col-span-3">
+                <label class="block text-[11px] font-mono text-slate-400 mb-1 font-bold">No. Presensi</label>
+                <input
+                  type="number"
+                  id="asesmen-no-absen"
+                  placeholder="Contoh: 15"
+                  class="lkpd-input w-full bg-brandDark p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                />
+              </div>
+              <div class="sm:col-span-3">
+                <label class="block text-[11px] font-mono text-slate-400 mb-1 font-bold">Fase / Kelas</label>
+                <input
+                  type="text"
+                  id="asesmen-kelas-val"
+                  value="E / X5"
+                  class="lkpd-input w-full bg-brandDark p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                />
+              </div>
+            </div>
+          </div>
+
           <!-- Tab Selector Asesmen: Pra-Tes vs Pasca-Tes -->
           <div class="flex flex-wrap gap-3 mb-8 justify-center">
             <button
@@ -3721,6 +3772,86 @@
         });
       }
 
+      /* ==========================================================
+         KONFIGURASI INTEGRASI GOOGLE APPS SCRIPT SPREADSHEET
+         ========================================================== */
+      let SCRIPT_ASESMEN_URL =
+        localStorage.getItem("gas_asesmen_url") || "";
+
+      function aturUrlSpreadsheet() {
+        const inputUrl = prompt(
+          "Masukkan URL Web App Google Apps Script (akhiran /exec):",
+          SCRIPT_ASESMEN_URL || "https://script.google.com/macros/s/.../exec"
+        );
+        if (inputUrl !== null) {
+          SCRIPT_ASESMEN_URL = inputUrl.trim();
+          localStorage.setItem("gas_asesmen_url", SCRIPT_ASESMEN_URL);
+          perbaruiStatusKoneksiSheet();
+          showToast("URL Google Apps Script berhasil disimpan!");
+        }
+      }
+
+      function perbaruiStatusKoneksiSheet() {
+        const lbl = document.getElementById("labelKoneksiSheet");
+        if (!lbl) return;
+        if (SCRIPT_ASESMEN_URL && SCRIPT_ASESMEN_URL.startsWith("https://script.google.com")) {
+          lbl.innerHTML = `<span class="text-emerald-400 font-bold">✓ Spreadsheet Aktif</span>`;
+        } else {
+          lbl.innerHTML = `<span>Atur Spreadsheet</span>`;
+        }
+      }
+
+      function simpanIdentitasAsesmen() {
+        const nama = (document.getElementById("asesmen-nama-siswa")?.value || "").trim();
+        const presensi = (document.getElementById("asesmen-no-absen")?.value || "").trim();
+        const kelas = (document.getElementById("asesmen-kelas-val")?.value || "E / X5").trim();
+        if (nama) localStorage.setItem("asesmen_nama_siswa", nama);
+        if (presensi) localStorage.setItem("asesmen_no_absen", presensi);
+        if (kelas) localStorage.setItem("asesmen_kelas_val", kelas);
+        return { nama, presensi, kelas };
+      }
+
+      function muatIdentitasAsesmen() {
+        const sn = localStorage.getItem("asesmen_nama_siswa");
+        const sp = localStorage.getItem("asesmen_no_absen");
+        const sk = localStorage.getItem("asesmen_kelas_val");
+        if (sn && document.getElementById("asesmen-nama-siswa"))
+          document.getElementById("asesmen-nama-siswa").value = sn;
+        if (sp && document.getElementById("asesmen-no-absen"))
+          document.getElementById("asesmen-no-absen").value = sp;
+        if (sk && document.getElementById("asesmen-kelas-val"))
+          document.getElementById("asesmen-kelas-val").value = sk;
+        perbaruiStatusKoneksiSheet();
+      }
+
+      function kirimKeSpreadsheet(payload) {
+        if (!SCRIPT_ASESMEN_URL || !SCRIPT_ASESMEN_URL.startsWith("https://script.google.com")) {
+          console.info("Spreadsheet URL belum diset. Nilai tersimpan di browser lokal.");
+          return;
+        }
+
+        const formData = new URLSearchParams();
+        for (const k in payload) {
+          formData.append(k, payload[k]);
+        }
+
+        fetch(SCRIPT_ASESMEN_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: formData
+        })
+        .then(() => {
+          showToast(`Berhasil dikirim ke Google Spreadsheet! (${payload.tipe === "pasca" ? "Post-Test" : "Pre-Test"})`);
+        })
+        .catch((err) => {
+          console.warn("Gagal mengirim ke Google Spreadsheet:", err);
+          showToast("Data tersimpan lokal di HP/Laptop.");
+        });
+      }
+
       function updateAsesmenCounter(type) {
         let count = 0;
         ASESMEN_SOAL_LIST.forEach((q) => {
@@ -3734,15 +3865,27 @@
       }
 
       function submitPraTes() {
+        const iden = simpanIdentitasAsesmen();
+        if (!iden.nama || !iden.presensi) {
+          alert("Silakan lengkapi Nama Lengkap Siswa dan Nomor Presensi terlebih dahulu di formulir Identitas Peserta!");
+          document.getElementById("asesmen-nama-siswa")?.focus();
+          return;
+        }
+
         let correct = 0;
         let answered = 0;
+        const userAnswers = {};
+
         ASESMEN_SOAL_LIST.forEach((q) => {
           const sel = document.querySelector(
             `input[name="pra_soal_${q.id}"]:checked`,
           );
           if (sel) {
             answered++;
+            userAnswers[q.id] = sel.value;
             if (sel.value === q.kunci) correct++;
+          } else {
+            userAnswers[q.id] = "-";
           }
         });
 
@@ -3759,18 +3902,40 @@
         localStorage.setItem("score_pra_val", score);
         document.getElementById("labelScorePra").textContent = score;
         showToast(`Pra-Tes terkirim! Skor awalmu: ${score}`);
+
+        // Kirim ke Google Spreadsheet Guru
+        kirimKeSpreadsheet({
+          nama: iden.nama,
+          presensi: iden.presensi,
+          kelas: iden.kelas,
+          tipe: "pre",
+          skor: score,
+          jawaban: JSON.stringify(userAnswers)
+        });
       }
 
       function submitPascaTes() {
+        const iden = simpanIdentitasAsesmen();
+        if (!iden.nama || !iden.presensi) {
+          alert("Silakan lengkapi Nama Lengkap Siswa dan Nomor Presensi terlebih dahulu di formulir Identitas Peserta!");
+          document.getElementById("asesmen-nama-siswa")?.focus();
+          return;
+        }
+
         let correct = 0;
         let answered = 0;
+        const userAnswers = {};
+
         ASESMEN_SOAL_LIST.forEach((q) => {
           const sel = document.querySelector(
             `input[name="pasca_soal_${q.id}"]:checked`,
           );
           if (sel) {
             answered++;
+            userAnswers[q.id] = sel.value;
             if (sel.value === q.kunci) correct++;
+          } else {
+            userAnswers[q.id] = "-";
           }
         });
 
@@ -3811,6 +3976,16 @@
 
         showToast(`Pasca-Tes terkirim! Skor: ${score}`);
         summary.scrollIntoView({ behavior: "smooth" });
+
+        // Kirim ke Google Spreadsheet Guru
+        kirimKeSpreadsheet({
+          nama: iden.nama,
+          presensi: iden.presensi,
+          kelas: iden.kelas,
+          tipe: "pasca",
+          skor: score,
+          jawaban: JSON.stringify(userAnswers)
+        });
       }
 
       function navigasiKeSimulasiWord() {
@@ -4114,6 +4289,7 @@
         renderAsesmenCards("pra", "soal-pra-container");
         renderAsesmenCards("pasca", "soal-pasca-container");
         muatDrafLKPD();
+        muatIdentitasAsesmen();
 
         const savedPra = localStorage.getItem("score_pra_val");
         if (savedPra !== null) {
