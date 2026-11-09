@@ -1,0 +1,4148 @@
+<!doctype html>
+<html lang="id" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Struktur Data — Informatika Fase E | SMA Negeri 4 Yogyakarta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Tipografi Sesuai Handbook: Fraunces (Serif Editorial), Plus Jakarta Sans (Sans-serif UI), JetBrains Mono (Code/Indeks) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,600;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ["'Fraunces'", "Georgia", "serif"],
+              sans: ["'Plus Jakarta Sans'", "sans-serif"],
+              mono: ["'JetBrains Mono'", "monospace"],
+            },
+            colors: {
+              /* Tema Gelap Asli OS dengan Penyesuaian: Hijau -> Emas, Pink -> Biru */
+              brandDark: "#111317",
+              brandDarkCard: "#191c24",
+              brandDarkBorder: "#272c3a",
+              brandDarkHover: "#202532",
+              brandGold: "#d4a657" /* Pengganti Hijau (Lime) */,
+              brandGoldHover: "#ebd09d",
+              brandGoldDark: "#8c6724",
+              brandBlue: "#38bdf8" /* Pengganti Pink */,
+              brandBlueHover: "#7dd3fc",
+              brandBlueDark: "#0284c7",
+              brandCream: "#f5eedc" /* Aksen Handbook */,
+              brandCreamLight: "#faf6eb",
+              brandPurple: "#c084fc",
+              brandCyan: "#38bdf8",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        background-color: #0c0e12;
+        color: #e2e8f0;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        overflow-x: hidden;
+      }
+
+      .font-display {
+        font-family: "Fraunces", Georgia, serif;
+      }
+
+      /* Background Mesh Gelap dengan Glow Emas & Biru */
+      .bg-mesh-dark {
+        background-color: #0d0f14;
+        background-image:
+          radial-gradient(
+            circle at 15% 15%,
+            rgba(212, 166, 87, 0.08) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 85% 30%,
+            rgba(56, 189, 248, 0.08) 0%,
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 50% 80%,
+            rgba(212, 166, 87, 0.06) 0%,
+            transparent 50%
+          );
+      }
+
+      .stem-curves {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.25;
+        z-index: 0;
+      }
+
+      .neo-border {
+        border: 2px solid #282d3c;
+      }
+
+      .neo-border-dark {
+        border: 2.5px solid #111317;
+      }
+
+      .neo-shadow {
+        box-shadow: 4px 4px 0px #000000;
+      }
+
+      .neo-shadow-gold {
+        box-shadow: 5px 5px 0px #d4a657;
+      }
+
+      /* Pills: Pink -> Biru, Lime -> Emas */
+      .pill-blue {
+        background: #38bdf8;
+        color: #111317;
+        font-weight: 800;
+        border-radius: 9999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pill-gold {
+        background: #d4a657;
+        color: #111317;
+        font-weight: 800;
+        border-radius: 9999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* SPA Section Switching */
+      .page-section {
+        display: none;
+        animation: fadeInPage 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .page-section.active {
+        display: block;
+      }
+
+      @keyframes fadeInPage {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .nav-active {
+        color: #111317 !important;
+        background: #d4a657 !important;
+        font-weight: 800 !important;
+      }
+
+      .asesmen-card {
+        background: #191c24;
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        border: 2px solid #272c3a;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      .option-label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        background: #111317;
+        border: 1.5px solid #272c3a;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      .option-label:hover {
+        background: #202532;
+        border-color: #d4a657;
+        transform: translateX(4px);
+      }
+
+      .option-label input[type="radio"] {
+        accent-color: #d4a657;
+        width: 1.15rem;
+        height: 1.15rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .btn-primary {
+        background: #d4a657;
+        color: #111317;
+        font-weight: 800;
+        padding: 0.75rem 1.75rem;
+        border-radius: 9999px;
+        transition: all 0.2s;
+        border: 2px solid #111317;
+        cursor: pointer;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-primary:hover {
+        background: #ebd09d;
+        box-shadow: 0 6px 18px rgba(212, 166, 87, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-blue {
+        background: #38bdf8;
+        color: #111317;
+        font-weight: 800;
+        padding: 0.75rem 1.75rem;
+        border-radius: 9999px;
+        transition: all 0.2s;
+        border: 2px solid #111317;
+        cursor: pointer;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-blue:hover {
+        background: #7dd3fc;
+        box-shadow: 0 6px 18px rgba(56, 189, 248, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: #cbd5e1;
+        border: 2px solid #334155;
+        font-weight: 700;
+        padding: 0.6rem 1.4rem;
+        border-radius: 9999px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-outline:hover {
+        border-color: #d4a657;
+        color: #d4a657;
+        background: rgba(212, 166, 87, 0.08);
+      }
+
+      .tab-asesmen-active {
+        background: #d4a657 !important;
+        color: #111317 !important;
+        font-weight: 800 !important;
+        border-color: #d4a657 !important;
+      }
+
+      .tab-asesmen-inactive {
+        background: #191c24;
+        color: #94a3b8;
+        border: 1.5px solid #272c3a;
+      }
+
+      .step-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: #111317;
+        border: 1.5px solid #272c3a;
+        transition: all 0.2s;
+      }
+
+      .step-item:hover {
+        background: #1a1e27;
+        border-color: #d4a657;
+      }
+
+      .step-num {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #d4a657;
+        color: #111317;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 0.9rem;
+      }
+
+      #toast {
+        position: fixed;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%) translateY(140px);
+        background: #111317;
+        color: #d4a657;
+        border: 2px solid #d4a657;
+        padding: 14px 28px;
+        border-radius: 9999px;
+        font-size: 0.95rem;
+        font-weight: 800;
+        box-shadow:
+          0 14px 35px rgba(0, 0, 0, 0.6),
+          0 0 20px rgba(212, 166, 87, 0.3);
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 10000;
+        max-width: 90vw;
+        text-align: center;
+      }
+
+      #toast.show {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #0d0f14;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #272c3a;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #d4a657;
+      }
+
+      .lkpd-input {
+        transition: all 0.2s;
+      }
+
+      .lkpd-input:focus {
+        box-shadow: 0 0 0 3px rgba(212, 166, 87, 0.25);
+      }
+
+      /* Animasi Elemen */
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .anim-pop-in {
+        animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      /* Visual Objek Tumpukan */
+      .item-stack-plate {
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 18px;
+        font-weight: 800;
+        font-size: 0.95rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        border: 2px solid transparent;
+        transition: all 0.2s;
+      }
+
+      /* Visual Objek Antrean */
+      .item-queue-person {
+        border-radius: 14px;
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        font-weight: 800;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        min-width: 90px;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-mesh-dark flex flex-col min-h-screen text-slate-200 selection:bg-brandGold selection:text-brandDark"
+  >
+    <!-- ==================== NAVBAR PERSIS TAMPILAN WEB SISTEM OPERASI ==================== -->
+    <header
+      class="sticky top-0 z-50 bg-[#111317]/95 backdrop-blur-md border-b border-[#242834]"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+          <!-- Logo Kotak di Kiri -->
+          <div class="flex items-center gap-3 shrink-0">
+            <div
+              class="w-11 h-11 bg-brandGold text-brandDark rounded-xl flex items-center justify-center font-black text-xl neo-border-dark shadow-sm"
+            >
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span
+                  class="font-extrabold text-xl tracking-tight text-white font-display whitespace-nowrap"
+                  >Struktur<span class="text-brandGold italic font-semibold"
+                    >Data</span
+                  ></span
+                >
+                <span
+                  class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-brandBlue/20 text-brandBlue border border-brandBlue/30 font-mono whitespace-nowrap"
+                  >Fase E &bull; Kelas X</span
+                >
+              </div>
+              <p
+                class="text-[11px] text-slate-400 font-medium whitespace-nowrap"
+              >
+                Disusun oleh:
+                <span class="text-brandBlue font-bold"
+                  >Agasta Pratama Nugraha, S.Kom.</span
+                >
+              </p>
+            </div>
+          </div>
+
+          <!-- Menu Navigasi Persis Web OS (Hijau -> Emas, Pink -> Biru) -->
+          <nav class="hidden lg:flex items-center gap-1 xl:gap-1.5 shrink-0">
+            <button
+              data-nav="beranda"
+              class="nav-btn nav-active px-3.5 xl:px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-brandDarkCard transition whitespace-nowrap"
+            >
+              <i class="fa-solid fa-house-chimney mr-1.5"></i> Beranda
+            </button>
+            <button
+              data-nav="materi"
+              class="nav-btn px-3.5 xl:px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-brandDarkCard transition whitespace-nowrap"
+            >
+              <i class="fa-solid fa-book-open mr-1.5"></i> Materi
+            </button>
+            <button
+              data-nav="sim-stack"
+              class="nav-btn px-3.5 xl:px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-brandDarkCard transition whitespace-nowrap"
+            >
+              <i class="fa-solid fa-layer-group mr-1.5"></i> Simulasi Stack
+            </button>
+            <button
+              data-nav="sim-queue"
+              class="nav-btn px-3.5 xl:px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-brandDarkCard transition whitespace-nowrap"
+            >
+              <i class="fa-solid fa-people-line mr-1.5"></i> Simulasi Queue
+            </button>
+            <button
+              data-nav="sim-array"
+              class="nav-btn px-3.5 xl:px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-brandDarkCard transition whitespace-nowrap"
+            >
+              <i class="fa-solid fa-table-cells mr-1.5"></i> Array &amp; Kasus D
+            </button>
+            <button
+              data-nav="lkpd"
+              class="nav-btn px-3.5 xl:px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-brandDarkCard transition whitespace-nowrap"
+            >
+              <i class="fa-solid fa-clipboard-check mr-1.5"></i> LKPD
+            </button>
+            <button
+              data-nav="asesmen"
+              class="ml-2 px-5 py-2 rounded-full text-xs font-black text-brandDark bg-brandBlue hover:bg-brandBlueHover transition neo-border-dark neo-shadow shadow-sm whitespace-nowrap"
+            >
+              <i class="fa-solid fa-pen-nib mr-1.5"></i> ASESMEN
+            </button>
+          </nav>
+
+          <!-- Hamburger Button Mobile -->
+          <div class="flex lg:hidden items-center">
+            <button
+              id="mobile-menu-btn"
+              class="text-slate-300 hover:text-brandGold p-2 rounded-lg bg-brandDarkCard border border-brandDarkBorder"
+            >
+              <i class="fa-solid fa-bars-staggered text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Menu -->
+      <div
+        id="mobile-menu"
+        class="hidden lg:hidden bg-brandDarkCard border-t border-brandDarkBorder px-4 py-4 space-y-2"
+      >
+        <button
+          data-nav="beranda"
+          class="nav-btn block w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-slate-200 hover:bg-brandDark"
+        >
+          <i class="fa-solid fa-house-chimney mr-2 text-brandGold"></i> Beranda
+        </button>
+        <button
+          data-nav="materi"
+          class="nav-btn block w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-slate-200 hover:bg-brandDark"
+        >
+          <i class="fa-solid fa-book-open mr-2 text-brandBlue"></i> Materi
+          Handbook
+        </button>
+        <button
+          data-nav="sim-stack"
+          class="nav-btn block w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-slate-200 hover:bg-brandDark"
+        >
+          <i class="fa-solid fa-layer-group mr-2 text-brandGold"></i> Tumpukan
+          (Stack - LIFO)
+        </button>
+        <button
+          data-nav="sim-queue"
+          class="nav-btn block w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-slate-200 hover:bg-brandDark"
+        >
+          <i class="fa-solid fa-people-line mr-2 text-brandBlue"></i> Antrean
+          (Queue - FIFO)
+        </button>
+        <button
+          data-nav="sim-array"
+          class="nav-btn block w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-slate-200 hover:bg-brandDark"
+        >
+          <i class="fa-solid fa-table-cells mr-2 text-amber-400"></i> Array
+          &amp; Kasus D (Word)
+        </button>
+        <button
+          data-nav="lkpd"
+          class="nav-btn block w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-slate-200 hover:bg-brandDark"
+        >
+          <i class="fa-solid fa-clipboard-check mr-2 text-rose-400"></i> LKPD
+          Interaktif
+        </button>
+        <button
+          data-nav="asesmen"
+          class="block w-full text-center px-4 py-3 rounded-xl text-sm font-black text-brandDark bg-brandBlue hover:bg-brandBlueHover neo-border-dark"
+        >
+          <i class="fa-solid fa-pen-nib mr-2"></i> ASESMEN
+        </button>
+      </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT AREA ==================== -->
+    <main
+      class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 relative z-10"
+    >
+      <!-- ========================================================================= -->
+      <!-- SECTION 1: BERANDA (PERSIS GAYA HERO, SVG CURVES, & CARD SISTEM OPERASI)  -->
+      <!-- ========================================================================= -->
+      <section id="beranda" class="page-section active">
+        <div
+          class="relative bg-brandDarkCard rounded-3xl p-8 md:p-14 mb-10 neo-border overflow-hidden shadow-2xl"
+        >
+          <svg
+            class="stem-curves"
+            viewBox="0 0 1000 600"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M-50 150 C 200 50, 400 450, 700 250 C 900 120, 1050 400, 1150 300"
+              stroke="#282d3c"
+              stroke-width="4"
+              stroke-dasharray="8 8"
+            />
+            <path
+              d="M-100 400 C 150 550, 500 200, 850 500 C 980 600, 1100 450, 1200 500"
+              stroke="#d4a657"
+              stroke-width="2"
+              stroke-opacity="0.3"
+            />
+            <circle
+              cx="800"
+              cy="180"
+              r="140"
+              stroke="#38bdf8"
+              stroke-width="2"
+              stroke-opacity="0.2"
+            />
+          </svg>
+          <div
+            class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center"
+          >
+            <div class="lg:col-span-7 text-left space-y-6">
+              <div class="flex items-center gap-3 flex-wrap">
+                <span
+                  class="font-mono text-xs font-extrabold uppercase px-3.5 py-1.5 rounded-full bg-brandDark text-brandGold border border-brandDarkBorder"
+                  >Informatika • Fase E</span
+                >
+                <span
+                  class="text-xs font-bold text-brandBlue flex items-center gap-1.5"
+                  ><i class="fa-solid fa-graduation-cap"></i> Disusun oleh:
+                  Agasta Pratama Nugraha, S.Kom.</span
+                >
+              </div>
+              <h1
+                class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight font-display"
+              >
+                Struktur<br /><span
+                  class="text-brandGold underline decoration-brandBlue decoration-wavy decoration-2 italic"
+                  >Data Standar</span
+                >
+                <span
+                  class="block text-2xl sm:text-3xl text-slate-300 font-extrabold mt-2 font-sans"
+                  >Penyimpanan, Pengurutan, &amp; Pemrosesan Efisien</span
+                >
+              </h1>
+              <p
+                class="text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed font-medium"
+              >
+                Pelajari bagaimana
+                <span class="text-brandGold font-bold"
+                  >List/Array, Stack (LIFO), dan Queue (FIFO)</span
+                >
+                bekerja dalam kehidupan sehari-hari maupun sistem komputer —
+                mulai dari loker perpustakaan, tumpukan piring prasmanan,
+                antrean kantin sekolah, hingga fitur
+                <span class="text-brandBlue font-bold">Undo (Ctrl+Z)</span> pada
+                aplikasi pengolah kata.
+              </p>
+              <div class="flex flex-wrap items-center gap-4 pt-2">
+                <button
+                  data-nav="sim-stack"
+                  class="btn-blue font-black text-base px-8 py-3.5 flex items-center gap-3 shadow-lg"
+                >
+                  <span>Mulai Simulasi Interaktif</span
+                  ><span
+                    class="w-7 h-7 rounded-full bg-brandDark text-brandBlue flex items-center justify-center text-xs font-black"
+                    ><i class="fa-solid fa-arrow-right"></i
+                  ></span>
+                </button>
+                <button
+                  data-nav="materi"
+                  class="btn-outline font-bold text-base px-6 py-3.5 flex items-center gap-2"
+                >
+                  <i class="fa-solid fa-book-open text-brandGold"></i> Buka
+                  Materi Handbook
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Profil Pembelajaran RPP -->
+            <div class="lg:col-span-5 space-y-4">
+              <div
+                class="bg-brandDark/90 p-6 rounded-3xl neo-border shadow-xl space-y-4"
+              >
+                <div
+                  class="flex items-center justify-between pb-3 border-b border-brandDarkBorder"
+                >
+                  <span
+                    class="text-xs font-mono font-bold uppercase text-brandGold"
+                    >Panduan Modul RPP</span
+                  >
+                  <span class="text-xs font-mono text-slate-400"
+                    >2 × 45 Menit (PBL)</span
+                  >
+                </div>
+
+                <div class="space-y-3">
+                  <div class="step-item">
+                    <span class="step-num text-xs">C4</span>
+                    <div>
+                      <strong class="text-white block font-display text-sm"
+                        >TP 1: Analisis Karakteristik</strong
+                      >
+                      <span
+                        class="text-xs text-slate-300 leading-relaxed block mt-0.5"
+                      >
+                        Murid mampu menganalisis karakteristik dan cara kerja
+                        konsep struktur data standar (List/Array, Stack, dan
+                        Queue) berdasarkan contoh kasus sehari-hari yang
+                        diberikan secara tepat dan logis. (C4)
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="step-item">
+                    <span class="step-num text-xs bg-brandBlue text-brandDark"
+                      >C5</span
+                    >
+                    <div>
+                      <strong class="text-white block font-display text-sm"
+                        >TP 2: Merancang Solusi</strong
+                      >
+                      <span
+                        class="text-xs text-slate-300 leading-relaxed block mt-0.5"
+                      >
+                        Murid mampu merancang solusi penyelesaian persoalan
+                        dengan menerapkan struktur data standar (List/Array,
+                        Stack, atau Queue) yang paling tepat berdasarkan studi
+                        kasus sehari-hari yang diberikan secara sistematis dan
+                        tepat. (C6)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="pt-2 flex justify-between items-center text-[11px] font-mono text-slate-400 border-t border-brandDarkBorder"
+                >
+                  <span>Model: <strong>Problem-Based Learning</strong></span>
+                  <span class="text-brandGold font-bold"
+                    >SMA Negeri 4 Yogyakarta</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 PERTANYAAN PEMANTIK (APERSEPSI RPP) -->
+        <div class="mb-10">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <span
+                class="text-xs font-mono font-bold uppercase text-brandGold tracking-wider"
+                >Apersepsi Kontekstual</span
+              >
+              <h2 class="text-2xl font-black text-white font-display mt-0.5">
+                Pertanyaan Pemantik Hari Ini
+              </h2>
+            </div>
+            <span class="text-xs font-mono text-slate-400 hidden sm:inline"
+              >PBL: Orientasi Masalah</span
+            >
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="asesmen-card hover:border-brandGold transition">
+              <div
+                class="w-10 h-10 rounded-xl bg-brandDark text-brandGold flex items-center justify-center font-mono font-black text-sm mb-3 neo-border"
+              >
+                Q1
+              </div>
+              <h3 class="font-bold text-white text-sm mb-1.5 font-display">
+                Antrean di Kantin
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                "Pernahkah kamu mengantre di kantin? Jika ada teman yang
+                menyerobot antrean, apa dampaknya terhadap keadilan sistem
+                antrean?"
+              </p>
+            </div>
+
+            <div class="asesmen-card hover:border-brandBlue transition">
+              <div
+                class="w-10 h-10 rounded-xl bg-brandDark text-brandBlue flex items-center justify-center font-mono font-black text-sm mb-3 neo-border"
+              >
+                Q2
+              </div>
+              <h3 class="font-bold text-white text-sm mb-1.5 font-display">
+                Fitur Undo (Ctrl+Z)
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                "Saat kamu salah ketik di Word lalu menekan Undo, teks kembali
+                ke ketikan terakhir. Bagaimana data ketikan itu disimpan oleh
+                sistem?"
+              </p>
+            </div>
+
+            <div class="asesmen-card hover:border-brandGold transition">
+              <div
+                class="w-10 h-10 rounded-xl bg-brandDark text-brandGold flex items-center justify-center font-mono font-black text-sm mb-3 neo-border"
+              >
+                Q3
+              </div>
+              <h3 class="font-bold text-white text-sm mb-1.5 font-display">
+                Tiket Konser Online
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                "Mengapa antrean tiket online harus memproses pembeli yang lebih
+                dulu datang secara berurutan, tidak boleh melompat acak?"
+              </p>
+            </div>
+
+            <div class="asesmen-card hover:border-brandBlue transition">
+              <div
+                class="w-10 h-10 rounded-xl bg-brandDark text-brandBlue flex items-center justify-center font-mono font-black text-sm mb-3 neo-border"
+              >
+                Q4
+              </div>
+              <h3 class="font-bold text-white text-sm mb-1.5 font-display">
+                Tumpukan Buku
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                "Jika kamu memiliki tumpukan buku yang tinggi dan ingin
+                mengambil buku paling bawah, apa yang harus kamu lakukan
+                terlebih dahulu?"
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 KOLOM: SINTAKS PBL & K3 -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
+          <div class="lg:col-span-8 asesmen-card space-y-4">
+            <h3
+              class="text-xl font-black text-white font-display flex items-center gap-2"
+            >
+              <i class="fa-solid fa-network-wired text-brandGold"></i> Alur
+              Pembelajaran PBL &amp; Deep Learning
+            </h3>
+
+            <div class="space-y-3">
+              <div class="step-item">
+                <span class="step-num">1</span>
+                <div>
+                  <h4 class="font-bold text-white text-sm">
+                    Orientasi Murid pada Masalah (8 Menit)
+                  </h4>
+                  <p class="text-xs text-slate-400 mt-0.5">
+                    Guru menyajikan kasus nyata Antrean Tiket Konser &amp; Fitur
+                    Undo Word.
+                  </p>
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-num">2</span>
+                <div>
+                  <h4 class="font-bold text-white text-sm">
+                    Mengorganisasikan Murid untuk Belajar (10 Menit)
+                  </h4>
+                  <p class="text-xs text-slate-400 mt-0.5">
+                    Membagi kelompok (4-5 siswa), memahami analogi visual List,
+                    Stack (LIFO), dan Queue (FIFO).
+                  </p>
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-num">3</span>
+                <div>
+                  <h4 class="font-bold text-white text-sm">
+                    Membimbing Penyelidikan Kelompok (22 Menit)
+                  </h4>
+                  <p class="text-xs text-slate-400 mt-0.5">
+                    Mengerjakan LKPD Aktivitas 1 &amp; 2, serta membuktikan
+                    jawaban via simulator digital interaktif di smartphone.
+                  </p>
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-num">4</span>
+                <div>
+                  <h4 class="font-bold text-white text-sm">
+                    Mengembangkan &amp; Menyajikan Hasil (10 Menit)
+                  </h4>
+                  <p class="text-xs text-slate-400 mt-0.5">
+                    Kelompok mempresentasikan hasil analisis dan langkah
+                    perancangan solusi di depan kelas.
+                  </p>
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-num">5</span>
+                <div>
+                  <h4 class="font-bold text-white text-sm">
+                    Menganalisis &amp; Mengevaluasi Proses (5 Menit)
+                  </h4>
+                  <p class="text-xs text-slate-400 mt-0.5">
+                    Meluruskan miskonsepsi, penguatan konsep visual, dan
+                    pengisian refleksi mandiri.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 space-y-6">
+            <div class="asesmen-card border-brandGold/40 space-y-4">
+              <div
+                class="flex items-center gap-2 text-brandGold font-bold text-xs uppercase font-mono"
+              >
+                <i class="fa-solid fa-shield-halved"></i> Keselamatan Kerja (K3)
+              </div>
+              <ul class="space-y-2.5 text-xs text-slate-300">
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-check text-brandGold mt-0.5"></i>
+                  <span
+                    >Duduk tegak dan ergonomis selama proses belajar
+                    berlangsung.</span
+                  >
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-check text-brandGold mt-0.5"></i>
+                  <span
+                    >Area meja kerja bersih dari makanan dan tumpahan air
+                    minum.</span
+                  >
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-check text-brandGold mt-0.5"></i>
+                  <span
+                    >Tidak menyentuh kabel listrik/charger dengan tangan
+                    basah.</span
+                  >
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-check text-brandGold mt-0.5"></i>
+                  <span
+                    >Menggunakan HP secara bijak sesuai instruksi
+                    pembelajaran.</span
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <div class="asesmen-card space-y-3">
+              <span class="text-xs font-mono font-bold text-slate-400 uppercase"
+                >Aksi Cepat</span
+              >
+              <button
+                data-nav="sim-stack"
+                class="w-full btn-primary text-xs py-3 flex justify-between items-center"
+              >
+                <span>Buka Simulasi Stack</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+              <button
+                data-nav="asesmen"
+                class="w-full btn-blue text-xs py-3 flex justify-between items-center"
+              >
+                <span>Kerjakan Asesmen (Pre-Test)</span>
+                <i class="fa-solid fa-pencil"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- SECTION 2: MATERI HANDBOOK LENGKAP (PERSIS LAYOUT MODUL DI SISTEM OPERASI)-->
+      <!-- ========================================================================= -->
+      <section id="materi" class="page-section">
+        <div
+          class="mb-8 flex flex-wrap justify-between items-center gap-4 bg-brandDarkCard p-6 rounded-3xl neo-border"
+        >
+          <div class="flex items-center gap-4">
+            <button
+              data-nav="beranda"
+              class="nav-btn w-10 h-10 rounded-2xl bg-brandDark text-slate-300 hover:text-brandGold hover:bg-brandDarkBorder flex items-center justify-center transition neo-border"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div>
+              <span class="font-mono text-xs font-bold text-brandGold uppercase"
+                >MODUL PEMBELAJARAN LENGKAP</span
+              >
+              <h2
+                class="text-2xl sm:text-3xl font-black text-white font-display"
+              >
+                Materi Struktur Data Standar
+              </h2>
+            </div>
+          </div>
+          <span class="pill-blue px-3.5 py-1 text-xs">Fase E / Kelas X</span>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+          <!-- Sidebar Navigasi Topik Modul Persis Web OS -->
+          <div class="w-full lg:w-72 flex-shrink-0">
+            <div
+              class="bg-brandDarkCard rounded-3xl neo-border p-3 sticky top-28 space-y-1.5"
+            >
+              <div
+                class="px-4 py-2 text-xs font-bold font-mono text-slate-400 uppercase tracking-wider"
+              >
+                Daftar Topik Modul
+              </div>
+              <button
+                onclick="showModulTopik('konsep')"
+                id="tab-konsep"
+                class="modul-tab w-full text-left px-4 py-3 rounded-2xl font-bold text-sm text-brandDark bg-brandGold transition flex items-center gap-2.5"
+              >
+                <i class="fa-solid fa-1 text-xs"></i
+                ><span>A. Pengertian Struktur Data</span>
+              </button>
+              <button
+                onclick="showModulTopik('array')"
+                id="tab-array"
+                class="modul-tab w-full text-left px-4 py-3 rounded-2xl font-bold text-sm text-slate-300 hover:bg-brandDark hover:text-white transition flex items-center gap-2.5"
+              >
+                <i class="fa-solid fa-2 text-xs"></i
+                ><span>B. List / Array (Indeks 0)</span>
+              </button>
+              <button
+                onclick="showModulTopik('stack')"
+                id="tab-stack"
+                class="modul-tab w-full text-left px-4 py-3 rounded-2xl font-bold text-sm text-slate-300 hover:bg-brandDark hover:text-white transition flex items-center gap-2.5"
+              >
+                <i class="fa-solid fa-3 text-xs"></i
+                ><span>C. Tumpukan (Stack - LIFO)</span>
+              </button>
+              <button
+                onclick="showModulTopik('queue')"
+                id="tab-queue"
+                class="modul-tab w-full text-left px-4 py-3 rounded-2xl font-bold text-sm text-slate-300 hover:bg-brandDark hover:text-white transition flex items-center gap-2.5"
+              >
+                <i class="fa-solid fa-4 text-xs"></i
+                ><span>D. Antrean (Queue - FIFO)</span>
+              </button>
+              <button
+                onclick="showModulTopik('komparasi')"
+                id="tab-komparasi"
+                class="modul-tab w-full text-left px-4 py-3 rounded-2xl font-bold text-sm text-slate-300 hover:bg-brandDark hover:text-white transition flex items-center gap-2.5"
+              >
+                <i class="fa-solid fa-5 text-xs"></i
+                ><span>E. Perbandingan 3 Struktur</span>
+              </button>
+              <button
+                onclick="showModulTopik('solusi')"
+                id="tab-solusi"
+                class="modul-tab w-full text-left px-4 py-3 rounded-2xl font-bold text-sm text-slate-300 hover:bg-brandDark hover:text-white transition flex items-center gap-2.5"
+              >
+                <i class="fa-solid fa-6 text-xs"></i
+                ><span>F. Merancang Solusi (C5)</span>
+              </button>
+              <button
+                onclick="showModulTopik('glosarium')"
+                id="tab-glosarium"
+                class="modul-tab w-full text-left px-4 py-3 rounded-2xl font-bold text-sm text-slate-300 hover:bg-brandDark hover:text-white transition flex items-center gap-2.5"
+              >
+                <i class="fa-solid fa-7 text-xs"></i
+                ><span>G. Glosarium &amp; Pustaka</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Konten Modul Sebelah Kanan (Lengkap Sesuai Handbook) -->
+          <div class="flex-grow space-y-6">
+            <!-- TOPIK A: PENGERTIAN -->
+            <div id="modul-konsep" class="modul-pane space-y-6">
+              <div
+                class="bg-brandDarkCard rounded-3xl neo-border p-8 space-y-4"
+              >
+                <span
+                  class="pill-gold px-3.5 py-1 text-xs font-mono font-bold uppercase"
+                  >Topik A</span
+                >
+                <h3 class="text-2xl font-black text-white font-display">
+                  Apa Itu Struktur Data?
+                </h3>
+                <p class="text-sm text-slate-300 leading-relaxed text-justify">
+                  Dalam informatika, kita sering kali perlu menyimpan sekumpulan
+                  data atau objek dalam suatu urutan tertentu agar sewaktu-waktu
+                  dapat diambil atau diproses kembali secara cepat dan tepat.
+                  <strong>Struktur Data</strong> adalah cara kita mengatur,
+                  menyimpan, dan menyusun data atau objek tersebut di dalam
+                  sistem komputer.
+                </p>
+                <div
+                  class="p-4 bg-brandDark rounded-2xl neo-border border-brandDarkBorder text-xs text-slate-300 space-y-2"
+                >
+                  <strong class="text-brandGold block font-display text-sm"
+                    >Prinsip Dasar:</strong
+                  >
+                  <p>
+                    Setiap struktur data memiliki aturan penyimpanan
+                    (memasukkan) dan pengambilan (mengeluarkan) yang berbeda,
+                    sehingga masing-masing digunakan untuk situasi persoalan
+                    yang berbeda pula.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- TOPIK B: LIST / ARRAY -->
+            <div id="modul-array" class="modul-pane hidden space-y-6">
+              <div
+                class="bg-brandDarkCard rounded-3xl neo-border p-8 space-y-4"
+              >
+                <span
+                  class="pill-gold px-3.5 py-1 text-xs font-mono font-bold uppercase"
+                  >Topik B</span
+                >
+                <h3 class="text-2xl font-black text-white font-display">
+                  List / Array (Daftar Berderet)
+                </h3>
+                <p class="text-sm text-slate-300 leading-relaxed text-justify">
+                  <strong>List (Daftar)</strong> atau
+                  <strong>Array</strong> adalah struktur data yang menyimpan
+                  banyak nilai atau objek sekaligus secara berderet dalam satu
+                  wadah memori. Setiap data memiliki nomor urut posisi yang
+                  disebut <strong>indeks</strong>. Di dalam pemrograman
+                  komputer, perhitungan indeks selalu dimulai dari angka
+                  <strong>0 (zero-based indexing)</strong>.
+                </p>
+
+                <!-- Diagram Memori Array Handbook Hal. 1 -->
+                <div class="p-6 bg-brandDark rounded-2xl neo-border my-3">
+                  <div
+                    class="text-center font-mono text-xs text-brandGold font-bold mb-4 uppercase"
+                  >
+                    Ilustrasi Penyimpanan Data pada Array "daftar_nilai"
+                  </div>
+                  <div
+                    class="grid grid-cols-5 gap-3 max-w-lg mx-auto font-mono text-center"
+                  >
+                    <div
+                      class="bg-brandDarkCard border-2 border-brandGold rounded-xl p-3"
+                    >
+                      <div class="text-[10px] text-brandGold font-bold mb-1">
+                        [0]
+                      </div>
+                      <div class="text-lg font-bold text-white">10</div>
+                    </div>
+                    <div
+                      class="bg-brandDarkCard border-2 border-brandGold rounded-xl p-3"
+                    >
+                      <div class="text-[10px] text-brandGold font-bold mb-1">
+                        [1]
+                      </div>
+                      <div class="text-lg font-bold text-white">9</div>
+                    </div>
+                    <div
+                      class="bg-brandDarkCard border-2 border-brandGold rounded-xl p-3"
+                    >
+                      <div class="text-[10px] text-brandGold font-bold mb-1">
+                        [2]
+                      </div>
+                      <div class="text-lg font-bold text-white">8</div>
+                    </div>
+                    <div
+                      class="bg-brandDarkCard border-2 border-brandGold rounded-xl p-3"
+                    >
+                      <div class="text-[10px] text-brandGold font-bold mb-1">
+                        [3]
+                      </div>
+                      <div class="text-lg font-bold text-white">10</div>
+                    </div>
+                    <div
+                      class="bg-brandDarkCard border-2 border-brandGold rounded-xl p-3"
+                    >
+                      <div class="text-[10px] text-brandGold font-bold mb-1">
+                        [4]
+                      </div>
+                      <div class="text-lg font-bold text-white">7</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pt-2">
+                  <div class="p-4 bg-brandDark rounded-xl neo-border">
+                    <strong
+                      class="text-brandGold block font-display text-sm mb-1"
+                      >1. Nomor Indeks</strong
+                    >
+                    Setiap elemen memiliki alamat angka mulai dari 0, 1, 2, dst.
+                  </div>
+                  <div class="p-4 bg-brandDark rounded-xl neo-border">
+                    <strong
+                      class="text-brandBlue block font-display text-sm mb-1"
+                      >2. Akses Langsung</strong
+                    >
+                    Bisa mengambil atau mengubah data pada posisi mana saja
+                    secara instan.
+                  </div>
+                  <div class="p-4 bg-brandDark rounded-xl neo-border">
+                    <strong class="text-white block font-display text-sm mb-1"
+                      >3. Loker Perpustakaan</strong
+                    >
+                    Kamu bisa langsung buka loker nomor 8 tanpa membuka loker 1
+                    s.d. 7!
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TOPIK C: STACK (LIFO) -->
+            <div id="modul-stack" class="modul-pane hidden space-y-6">
+              <div
+                class="bg-brandDarkCard rounded-3xl neo-border p-8 space-y-4"
+              >
+                <span
+                  class="pill-blue px-3.5 py-1 text-xs font-mono font-bold uppercase"
+                  >Topik C</span
+                >
+                <h3 class="text-2xl font-black text-white font-display">
+                  Tumpukan (Stack) — Prinsip LIFO
+                </h3>
+                <p class="text-sm text-slate-300 leading-relaxed text-justify">
+                  <strong>Tumpukan (Stack)</strong> adalah metode penyimpanan di
+                  mana objek-objek diletakkan saling menumpuk satu di atas yang
+                  lain. Berbeda dengan Array yang bisa diambil dari tengah, pada
+                  Stack kita hanya bisa menambah dan mengambil objek dari satu
+                  bagian saja:
+                  <strong>bagian paling atas tumpukan (TOP)</strong>.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+                  <div class="p-4 bg-brandDark rounded-xl neo-border">
+                    <code class="text-brandGold font-bold text-sm block mb-1"
+                      >Push X</code
+                    >
+                    <p class="text-xs text-slate-300">
+                      Menyimpan atau memasukkan objek <code>X</code> ke bagian
+                      puncak tumpukan.
+                    </p>
+                  </div>
+                  <div class="p-4 bg-brandDark rounded-xl neo-border">
+                    <code class="text-brandBlue font-bold text-sm block mb-1"
+                      >Pop</code
+                    >
+                    <p class="text-xs text-slate-300">
+                      Mengeluarkan atau mengambil objek yang berada di posisi
+                      paling atas saat ini.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Callout Analisis Loket Handbook Hal. 4 -->
+                <div
+                  class="p-4 bg-brandDark rounded-xl neo-border border-amber-500/40 text-xs text-slate-300 space-y-1"
+                >
+                  <strong class="text-amber-300 block font-display text-sm"
+                    >Mengapa Tumpukan Formulir Loket Tidak Adil?</strong
+                  >
+                  <p class="leading-relaxed">
+                    Jika formulir pasien ditumpuk ke atas lalu dokter memanggil
+                    mulai dari formulir paling atas, maka pasien yang datang
+                    paling awal akan berada di dasar tumpukan dan dilayani
+                    paling akhir! Karena itu, Stack hanya tepat digunakan untuk
+                    kebutuhan pembatalan urutan mundur, seperti
+                    <strong>fitur Undo (Ctrl+Z)</strong> pada Word atau
+                    <strong>tombol Back pada browser</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- TOPIK D: QUEUE (FIFO) -->
+            <div id="modul-queue" class="modul-pane hidden space-y-6">
+              <div
+                class="bg-brandDarkCard rounded-3xl neo-border p-8 space-y-4"
+              >
+                <span
+                  class="pill-gold px-3.5 py-1 text-xs font-mono font-bold uppercase"
+                  >Topik D</span
+                >
+                <h3 class="text-2xl font-black text-white font-display">
+                  Antrean (Queue) — Prinsip FIFO
+                </h3>
+                <p class="text-sm text-slate-300 leading-relaxed text-justify">
+                  <strong>Antrean (Queue)</strong> adalah metode penyimpanan
+                  data yang cara kerjanya persis seperti barisan antrean orang
+                  di loket atau kasir. Elemen baru selalu masuk melalui bagian
+                  <strong>belakang antrean (Rear)</strong>, sedangkan elemen
+                  yang dilayani selalu keluar dari bagian
+                  <strong>depan antrean (Front)</strong>.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+                  <div class="p-4 bg-brandDark rounded-xl neo-border">
+                    <code class="text-brandBlue font-bold text-sm block mb-1"
+                      >Enqueue X</code
+                    >
+                    <p class="text-xs text-slate-300">
+                      Memasukkan nilai atau objek <code>X</code> ke dalam
+                      barisan paling belakang antrean.
+                    </p>
+                  </div>
+                  <div class="p-4 bg-brandDark rounded-xl neo-border">
+                    <code class="text-brandGold font-bold text-sm block mb-1"
+                      >Dequeue</code
+                    >
+                    <p class="text-xs text-slate-300">
+                      Mengeluarkan elemen yang berada di posisi pertama (paling
+                      depan) untuk dilayani.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-2">
+                  <div class="p-3.5 bg-brandDark rounded-xl neo-border">
+                    <strong class="text-white block font-display mb-1"
+                      >Mobil Lampu Merah</strong
+                    >
+                    Mobil terdepan melaju pertama saat lampu hijau menyala.
+                  </div>
+                  <div class="p-3.5 bg-brandDark rounded-xl neo-border">
+                    <strong class="text-white block font-display mb-1"
+                      >Antrean Printer</strong
+                    >
+                    Dokumen pertama dikirim akan dicetak terlebih dahulu.
+                  </div>
+                  <div class="p-3.5 bg-brandDark rounded-xl neo-border">
+                    <strong class="text-white block font-display mb-1"
+                      >Antrean Tiket Konser</strong
+                    >
+                    Pembeli pertama diproses pertama mendapat nomor kursi.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TOPIK E: KOMPARASI -->
+            <div id="modul-komparasi" class="modul-pane hidden space-y-6">
+              <div
+                class="bg-brandDarkCard rounded-3xl neo-border p-8 space-y-4"
+              >
+                <span
+                  class="pill-blue px-3.5 py-1 text-xs font-mono font-bold uppercase"
+                  >Topik E</span
+                >
+                <h3 class="text-2xl font-black text-white font-display">
+                  Tabel Perbandingan Ketiga Struktur Data
+                </h3>
+
+                <div class="overflow-x-auto">
+                  <table class="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr class="bg-brandDark text-brandGold font-mono">
+                        <th class="p-3.5">Aspek</th>
+                        <th class="p-3.5">List / Array</th>
+                        <th class="p-3.5">Stack (Tumpukan)</th>
+                        <th class="p-3.5">Queue (Antrean)</th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      class="divide-y divide-brandDarkBorder text-slate-300"
+                    >
+                      <tr>
+                        <td class="p-3.5 font-bold text-white">
+                          Prinsip Kerja
+                        </td>
+                        <td class="p-3.5">Indeks [0] Akses Langsung</td>
+                        <td class="p-3.5 font-bold text-brandBlue">
+                          LIFO (Last In First Out)
+                        </td>
+                        <td class="p-3.5 font-bold text-brandGold">
+                          FIFO (First In First Out)
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3.5 font-bold text-white">
+                          Memasukkan Data
+                        </td>
+                        <td class="p-3.5">Sisip pada indeks</td>
+                        <td class="p-3.5"><code>Push X</code> (di atas)</td>
+                        <td class="p-3.5">
+                          <code>Enqueue X</code> (di belakang)
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3.5 font-bold text-white">
+                          Mengeluarkan Data
+                        </td>
+                        <td class="p-3.5">Bebas di mana saja</td>
+                        <td class="p-3.5"><code>Pop</code> (dari atas)</td>
+                        <td class="p-3.5"><code>Dequeue</code> (dari depan)</td>
+                      </tr>
+                      <tr>
+                        <td class="p-3.5 font-bold text-white">
+                          Situasi Penggunaan
+                        </td>
+                        <td class="p-3.5">Daftar presensi, loker tas</td>
+                        <td class="p-3.5">Undo Word, Back browser</td>
+                        <td class="p-3.5">Antrean loket, antrean printer</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- TOPIK F: SOLUSI C5 -->
+            <div id="modul-solusi" class="modul-pane hidden space-y-6">
+              <div
+                class="bg-brandDarkCard rounded-3xl neo-border p-8 space-y-4"
+              >
+                <span
+                  class="pill-gold px-3.5 py-1 text-xs font-mono font-bold uppercase"
+                  >Topik F</span
+                >
+                <h3 class="text-2xl font-black text-white font-display">
+                  4 Langkah Merancang Solusi Sistematis (C5)
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div class="p-4 bg-brandDark rounded-2xl neo-border">
+                    <span class="step-num text-xs mb-2">1</span>
+                    <strong class="text-white block font-display text-sm mb-1"
+                      >Pahami Persoalan</strong
+                    >
+                    Identifikasi objek apa yang sedang disimpan dan bagaimana
+                    aturan pengambilannya dalam kasus tersebut.
+                  </div>
+                  <div class="p-4 bg-brandDark rounded-2xl neo-border">
+                    <span
+                      class="step-num text-xs mb-2 bg-brandBlue text-brandDark"
+                      >2</span
+                    >
+                    <strong class="text-white block font-display text-sm mb-1"
+                      >Tentukan Struktur Data</strong
+                    >
+                    Pilih apakah persoalan diselesaikan dengan List/Array,
+                    Stack, atau Queue.
+                  </div>
+                  <div class="p-4 bg-brandDark rounded-2xl neo-border">
+                    <span class="step-num text-xs mb-2">3</span>
+                    <strong class="text-white block font-display text-sm mb-1"
+                      >Berikan Alasan Logis</strong
+                    >
+                    Jelaskan argumentasi berdasarkan cara kerja (Indeks, prinsip
+                    LIFO, atau FIFO).
+                  </div>
+                  <div class="p-4 bg-brandDark rounded-2xl neo-border">
+                    <span
+                      class="step-num text-xs mb-2 bg-brandBlue text-brandDark"
+                      >4</span
+                    >
+                    <strong class="text-white block font-display text-sm mb-1"
+                      >Susun Urutan Langkah</strong
+                    >
+                    Tuliskan urutan operasi penyimpanan dan status memori dari
+                    awal hingga akhir.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TOPIK G: GLOSARIUM & PUSTAKA -->
+            <div id="modul-glosarium" class="modul-pane hidden space-y-6">
+              <div
+                class="bg-brandDarkCard rounded-3xl neo-border p-8 space-y-4"
+              >
+                <span
+                  class="pill-blue px-3.5 py-1 text-xs font-mono font-bold uppercase"
+                  >Topik G</span
+                >
+                <h3 class="text-2xl font-black text-white font-display">
+                  Glosarium Istilah &amp; Daftar Pustaka
+                </h3>
+
+                <dl class="space-y-3 text-xs divide-y divide-brandDarkBorder">
+                  <div class="pt-2">
+                    <dt class="font-bold text-brandGold font-display text-sm">
+                      Stack (Tumpukan)
+                    </dt>
+                    <dd class="text-slate-300">
+                      Struktur data dengan prinsip LIFO (Last In First Out) di
+                      mana penambahan dan pengambilan dilakukan dari puncak
+                      atas.
+                    </dd>
+                  </div>
+                  <div class="pt-2">
+                    <dt class="font-bold text-brandBlue font-display text-sm">
+                      Queue (Antrean)
+                    </dt>
+                    <dd class="text-slate-300">
+                      Struktur data dengan prinsip FIFO (First In First Out) di
+                      mana elemen masuk dari belakang dan keluar dari depan.
+                    </dd>
+                  </div>
+                  <div class="pt-2">
+                    <dt class="font-bold text-brandGold font-display text-sm">
+                      List / Array
+                    </dt>
+                    <dd class="text-slate-300">
+                      Struktur data yang menyimpan sekumpulan nilai berurutan
+                      yang dapat diakses langsung menggunakan nomor indeks.
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- SECTION 3: SIMULASI TUMPUKAN (STACK - LIFO) — KLIK TANPA KETIK            -->
+      <!-- ========================================================================= -->
+      <section id="sim-stack" class="page-section">
+        <div
+          class="flex flex-wrap gap-4 justify-between items-center mb-8 bg-brandDarkCard p-6 rounded-3xl neo-border"
+        >
+          <div>
+            <span class="font-mono text-xs font-bold text-brandGold uppercase"
+              >SIMULASI INTERAKTIF STACK</span
+            >
+            <h2 class="text-2xl sm:text-3xl font-black text-white font-display">
+              Tumpukan Piring &amp; Buku (LIFO)
+            </h2>
+            <p class="text-slate-300 text-xs sm:text-sm mt-1">
+              Tinggal <strong>ketuk objek</strong> untuk menambah ke tumpukan
+              (Push) atau <strong>ketuk tombol Ambil</strong> untuk mengeluarkan
+              teratas (Pop).
+            </p>
+          </div>
+          <button
+            onclick="resetStackSim()"
+            class="text-xs bg-brandDark hover:bg-brandDarkBorder px-4 py-2.5 rounded-full font-bold text-slate-200 border border-brandDarkBorder flex items-center gap-2"
+          >
+            <i class="fa-solid fa-rotate-left text-brandGold"></i> Reset Rak
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Panel Pilihan Objek Cepat (Tinggal Klik) -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-brandDarkCard p-6 rounded-3xl neo-border space-y-4">
+              <h3
+                class="font-extrabold text-white text-base flex items-center gap-2"
+              >
+                <i class="fa-solid fa-hand-pointer text-brandGold"></i> Ketuk
+                untuk Menambah (Push)
+              </h3>
+              <p class="text-xs text-slate-400">
+                Pilih objek siap pakai di bawah untuk langsung menumpuk ke rak
+                tanpa mengetik:
+              </p>
+
+              <!-- Chip Objek Siap Klik -->
+              <div class="grid grid-cols-2 gap-2.5">
+                <button
+                  onclick="
+                    pushPresetItem(
+                      '🍽️ Piring Emas',
+                      'border-brandGold bg-brandGold/20 text-brandGold',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-brandGold text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <span class="w-3 h-3 rounded-full bg-brandGold"></span> Piring
+                  Emas
+                </button>
+                <button
+                  onclick="
+                    pushPresetItem(
+                      '🍽️ Piring Biru',
+                      'border-brandBlue bg-brandBlue/20 text-brandBlue',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-brandBlue text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <span class="w-3 h-3 rounded-full bg-brandBlue"></span> Piring
+                  Biru
+                </button>
+                <button
+                  onclick="
+                    pushPresetItem(
+                      '🍽️ Piring Merah',
+                      'border-rose-500 bg-rose-500/20 text-rose-300',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-rose-500 text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <span class="w-3 h-3 rounded-full bg-rose-500"></span> Piring
+                  Merah
+                </button>
+                <button
+                  onclick="
+                    pushPresetItem(
+                      '🍽️ Piring Hijau',
+                      'border-emerald-500 bg-emerald-500/20 text-emerald-300',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-emerald-500 text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                  Piring Hijau
+                </button>
+                <button
+                  onclick="
+                    pushPresetItem(
+                      '📚 Buku Informatika',
+                      'border-brandBlue bg-brandBlue/20 text-brandBlue',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-brandBlue text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <i class="fa-solid fa-book text-brandBlue"></i> Informatika
+                </button>
+                <button
+                  onclick="
+                    pushPresetItem(
+                      '📚 Buku Matematika',
+                      'border-brandGold bg-brandGold/20 text-brandGold',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-brandGold text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <i class="fa-solid fa-book text-brandGold"></i> Matematika
+                </button>
+              </div>
+
+              <!-- Tombol Aksi Pop & Otomatis Tracing -->
+              <div class="pt-3 border-t border-brandDarkBorder space-y-2.5">
+                <button
+                  onclick="popStackItem()"
+                  class="w-full btn-blue text-xs font-black py-3 flex items-center justify-center gap-2"
+                >
+                  <i class="fa-solid fa-arrow-up-from-bracket"></i> Ambil Piring
+                  Teratas (Pop)
+                </button>
+                <button
+                  onclick="runAutoTracingBukuStack()"
+                  class="w-full btn-primary text-xs font-black py-3 flex items-center justify-center gap-2"
+                >
+                  <i class="fa-solid fa-play"></i> Jalankan Tracing Buku Siswa
+                  (5, 3, 2, 4...)
+                </button>
+              </div>
+
+              <!-- Input Opsional Tambah Teks Khusus -->
+              <div class="pt-2 border-t border-brandDarkBorder">
+                <span class="text-[11px] font-mono text-slate-400 block mb-1"
+                  >Tambah teks custom jika perlu:</span
+                >
+                <div class="flex gap-2">
+                  <input
+                    type="text"
+                    id="customStackInput"
+                    placeholder="Ketik nama objek..."
+                    class="flex-1 bg-brandDark p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                  />
+                  <button
+                    onclick="pushCustomStack()"
+                    class="btn-outline text-xs px-4"
+                  >
+                    Push
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status Tumpukan -->
+            <div
+              class="bg-brandDarkCard p-6 rounded-3xl neo-border space-y-2 font-mono text-xs"
+            >
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 uppercase">Jumlah di Rak:</span>
+                <strong id="stackTotalCount" class="text-white text-base"
+                  >0</strong
+                >
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 uppercase"
+                  >Posisi Paling Atas (TOP):</span
+                >
+                <strong id="stackTopLabel" class="text-brandGold">—</strong>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 uppercase"
+                  >Terakhir Diambil (POP):</span
+                >
+                <strong id="stackLastPoppedLabel" class="text-brandBlue"
+                  >—</strong
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Wadah Visual Rak Tumpukan Vertikal -->
+          <div
+            class="lg:col-span-7 bg-brandDarkCard p-8 rounded-3xl neo-border flex flex-col justify-between"
+          >
+            <div>
+              <div
+                class="flex justify-between items-center pb-3 border-b border-brandDarkBorder mb-4"
+              >
+                <span
+                  class="text-xs font-mono font-bold uppercase text-brandGold"
+                  >Visualisasi Rak Piring Vertikal</span
+                >
+                <span class="text-[10px] font-mono text-slate-400"
+                  >Pintu Masuk &amp; Keluar di Atas (TOP)</span
+                >
+              </div>
+
+              <div
+                class="min-h-[320px] p-6 bg-brandDark rounded-2xl neo-border flex flex-col justify-end items-center relative"
+              >
+                <div
+                  id="topArrowIndicator"
+                  class="hidden absolute top-4 text-xs font-mono font-bold text-brandGold flex items-center gap-1.5 animate-bounce"
+                >
+                  <i class="fa-solid fa-arrow-down"></i> Puncak Tumpukan (TOP)
+                </div>
+
+                <div
+                  id="stackPlateRack"
+                  class="w-full max-w-sm flex flex-col-reverse gap-2.5 items-center z-10"
+                >
+                  <!-- Plates rendered here -->
+                </div>
+
+                <div
+                  id="stackEmptyState"
+                  class="my-auto text-center text-slate-500 font-mono text-xs py-10"
+                >
+                  <i
+                    class="fa-solid fa-utensils text-4xl mb-2 block opacity-25"
+                  ></i>
+                  Rak tumpukan masih kosong.<br />Ketuk salah satu pilihan objek
+                  di samping untuk menumpuk!
+                </div>
+
+                <div
+                  class="w-full max-w-sm mt-3 h-4 bg-brandDarkCard rounded-b-xl border-t-2 border-brandGold flex items-center justify-center"
+                >
+                  <span
+                    class="text-[9px] font-mono text-slate-400 uppercase font-bold tracking-widest"
+                    >Dasar Rak (Bottom)</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div
+              id="stackLiveNarrative"
+              class="mt-4 p-4 bg-brandDark rounded-2xl neo-border text-xs font-mono text-brandGold"
+            >
+              💡 <strong>Prinsip LIFO:</strong> Objek yang terakhir kamu tumpuk
+              akan berada di paling atas dan menjadi yang pertama kali kamu
+              ambil!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- SECTION 4: SIMULASI ANTREAN (QUEUE - FIFO) — KLIK TANPA KETIK             -->
+      <!-- ========================================================================= -->
+      <section id="sim-queue" class="page-section">
+        <div
+          class="flex flex-wrap gap-4 justify-between items-center mb-8 bg-brandDarkCard p-6 rounded-3xl neo-border"
+        >
+          <div>
+            <span class="font-mono text-xs font-bold text-brandBlue uppercase"
+              >SIMULASI INTERAKTIF QUEUE</span
+            >
+            <h2 class="text-2xl sm:text-3xl font-black text-white font-display">
+              Antrean Siswa di Kantin (FIFO)
+            </h2>
+            <p class="text-slate-300 text-xs sm:text-sm mt-1">
+              Tinggal <strong>ketuk nama siswa</strong> untuk masuk antrean
+              (Enqueue) atau <strong>ketuk Layani</strong> untuk melayani siswa
+              terdepan (Dequeue).
+            </p>
+          </div>
+          <button
+            onclick="resetQueueSim()"
+            class="text-xs bg-brandDark hover:bg-brandDarkBorder px-4 py-2.5 rounded-full font-bold text-slate-200 border border-brandDarkBorder flex items-center gap-2"
+          >
+            <i class="fa-solid fa-rotate-left text-brandBlue"></i> Reset Antrean
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Panel Siswa Siap Klik -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-brandDarkCard p-6 rounded-3xl neo-border space-y-4">
+              <h3
+                class="font-extrabold text-white text-base flex items-center gap-2"
+              >
+                <i class="fa-solid fa-person-walking text-brandBlue"></i> Ketuk
+                Siswa untuk Mengantre (Enqueue)
+              </h3>
+              <p class="text-xs text-slate-400">
+                Pilih siswa di bawah untuk langsung berbaris di belakang antrean
+                tanpa mengetik:
+              </p>
+
+              <div class="grid grid-cols-2 gap-2.5">
+                <button
+                  onclick="
+                    enqueuePresetStudent(
+                      'Budi (Absen 01)',
+                      'bg-brandGold text-brandDark',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-brandGold text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <i class="fa-solid fa-user-graduate text-brandGold"></i> Budi
+                  (01)
+                </button>
+                <button
+                  onclick="
+                    enqueuePresetStudent(
+                      'Siti (Absen 02)',
+                      'bg-brandBlue text-brandDark',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-brandBlue text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <i class="fa-solid fa-user-graduate text-brandBlue"></i> Siti
+                  (02)
+                </button>
+                <button
+                  onclick="
+                    enqueuePresetStudent(
+                      'Andi (Absen 03)',
+                      'bg-emerald-400 text-brandDark',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-emerald-400 text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <i class="fa-solid fa-user-graduate text-emerald-400"></i>
+                  Andi (03)
+                </button>
+                <button
+                  onclick="
+                    enqueuePresetStudent(
+                      'Rina (Absen 04)',
+                      'bg-purple-400 text-brandDark',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-purple-400 text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <i class="fa-solid fa-user-graduate text-purple-400"></i> Rina
+                  (04)
+                </button>
+                <button
+                  onclick="
+                    enqueuePresetStudent(
+                      'Doni (Absen 05)',
+                      'bg-amber-400 text-brandDark',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-amber-400 text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <i class="fa-solid fa-user-graduate text-amber-400"></i> Doni
+                  (05)
+                </button>
+                <button
+                  onclick="
+                    enqueuePresetStudent(
+                      'Maya (Absen 06)',
+                      'bg-rose-400 text-brandDark',
+                    )
+                  "
+                  class="p-3 bg-brandDark rounded-xl neo-border hover:border-rose-400 text-left text-xs font-bold transition flex items-center gap-2"
+                >
+                  <i class="fa-solid fa-user-graduate text-rose-400"></i> Maya
+                  (06)
+                </button>
+              </div>
+
+              <!-- Tombol Aksi Dequeue & Otomatis Tracing -->
+              <div class="pt-3 border-t border-brandDarkBorder space-y-2.5">
+                <button
+                  onclick="dequeueStudentItem()"
+                  class="w-full btn-blue text-xs font-black py-3 flex items-center justify-center gap-2"
+                >
+                  <i class="fa-solid fa-bell-concierge"></i> Layani Siswa
+                  Terdepan (Dequeue)
+                </button>
+                <button
+                  onclick="runAutoTracingBukuQueue()"
+                  class="w-full btn-primary text-xs font-black py-3 flex items-center justify-center gap-2"
+                >
+                  <i class="fa-solid fa-play"></i> Jalankan Tracing Buku Siswa
+                  (5, 3, Deq, 4...)
+                </button>
+              </div>
+
+              <!-- Input Tambah Siswa Custom Jika Perlu -->
+              <div class="pt-2 border-t border-brandDarkBorder">
+                <span class="text-[11px] font-mono text-slate-400 block mb-1"
+                  >Tambah nama custom jika perlu:</span
+                >
+                <div class="flex gap-2">
+                  <input
+                    type="text"
+                    id="customQueueInput"
+                    placeholder="Ketik nama siswa..."
+                    class="flex-1 bg-brandDark p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                  />
+                  <button
+                    onclick="enqueueCustomStudent()"
+                    class="btn-outline text-xs px-4"
+                  >
+                    Enqueue
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status Antrean -->
+            <div
+              class="bg-brandDarkCard p-6 rounded-3xl neo-border space-y-2 font-mono text-xs"
+            >
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 uppercase">Panjang Barisan:</span>
+                <strong id="queueTotalCount" class="text-white text-base"
+                  >0 Siswa</strong
+                >
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 uppercase"
+                  >Posisi Depan (FRONT):</span
+                >
+                <strong id="queueFrontLabel" class="text-brandBlue">—</strong>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 uppercase"
+                  >Posisi Belakang (REAR):</span
+                >
+                <strong id="queueRearLabel" class="text-brandGold">—</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wadah Barisan Antrean Horizontal -->
+          <div
+            class="lg:col-span-7 bg-brandDarkCard p-8 rounded-3xl neo-border flex flex-col justify-between"
+          >
+            <div>
+              <div
+                class="flex justify-between items-center pb-3 border-b border-brandDarkBorder mb-4"
+              >
+                <span
+                  class="text-xs font-mono font-bold uppercase text-brandBlue"
+                  >Stan Kasir Kantin Sekolah</span
+                >
+                <span class="text-[10px] font-mono text-slate-400"
+                  >Keluar di Kiri (Front) ← Masuk di Kanan (Rear)</span
+                >
+              </div>
+
+              <div
+                class="min-h-[260px] p-4 bg-brandDark rounded-2xl neo-border flex items-center justify-between overflow-x-auto relative"
+              >
+                <!-- Stan Kasir di Kiri -->
+                <div
+                  class="shrink-0 p-4 bg-brandDarkCard border-2 border-brandBlue rounded-2xl text-center font-mono mr-4 shadow-lg"
+                >
+                  <div
+                    class="w-12 h-12 rounded-full bg-brandBlue text-brandDark flex items-center justify-center text-xl mx-auto mb-1 font-bold"
+                  >
+                    <i class="fa-solid fa-utensils"></i>
+                  </div>
+                  <span
+                    class="text-[10px] font-bold text-brandBlue uppercase block"
+                    >Loket Kasir</span
+                  >
+                  <span class="text-[9px] text-slate-400">[FRONT]</span>
+                </div>
+
+                <!-- Jalur Siswa Mengantre -->
+                <div
+                  id="queueStudentsTrack"
+                  class="flex-1 flex gap-3.5 items-center min-h-[140px] px-2 overflow-x-auto"
+                >
+                  <!-- Students rendered here -->
+                </div>
+
+                <div
+                  id="queueEmptyState"
+                  class="hidden text-center text-slate-500 font-mono text-xs w-full py-8"
+                >
+                  Antrean kasir kosong.<br />Ketuk nama siswa di samping untuk
+                  berbaris!
+                </div>
+              </div>
+            </div>
+
+            <div
+              id="queueLiveNarrative"
+              class="mt-4 p-4 bg-brandDark rounded-2xl neo-border text-xs font-mono text-brandBlue"
+            >
+              💡 <strong>Prinsip FIFO:</strong> Siswa yang pertama kali berdiri
+              di antrean akan pertama kali dilayani kasir.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- SECTION 5: SIMULASI ARRAY & KASUS D (WORD UNDO) — KLIK TANPA KETIK        -->
+      <!-- ========================================================================= -->
+      <section id="sim-array" class="page-section space-y-10">
+        <!-- 1. SIMULATOR ARRAY LOKER SEKOLAH -->
+        <div class="bg-brandDarkCard p-8 rounded-3xl neo-border space-y-6">
+          <div
+            class="flex flex-wrap justify-between items-center pb-4 border-b border-brandDarkBorder gap-3"
+          >
+            <div>
+              <span class="font-mono text-xs font-bold text-brandGold uppercase"
+                >ANALISIS ARRAY LANGSUNG</span
+              >
+              <h2
+                class="text-2xl sm:text-3xl font-black text-white font-display"
+              >
+                Deretan Loker Sekolah (Direct Access)
+              </h2>
+            </div>
+            <span class="pill-gold px-3.5 py-1 text-xs font-mono"
+              >Indeks [0] s.d. [4]</span
+            >
+          </div>
+
+          <p class="text-sm text-slate-300">
+            Tinggal <strong>ketuk pintu loker</strong> di bawah untuk membuka
+            dan melihat barang di dalamnya secara langsung tanpa harus
+            membongkar loker lain:
+          </p>
+
+          <!-- Deretan Loker Sekolah -->
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-4" id="lockersRowUi">
+            <!-- Rendered by JS -->
+          </div>
+
+          <div
+            id="lockerStatusFeedback"
+            class="p-4 bg-brandDark rounded-2xl neo-border text-xs font-mono text-brandGold"
+          >
+            🔑 Ketuk tombol <strong>Buka Loker</strong> untuk mencoba pembuktian
+            Direct Access $O(1)$!
+          </div>
+        </div>
+
+        <!-- 2. SIMULATOR KASUS D MICROSOFT WORD UNDO REALISTIS -->
+        <div
+          id="kasus-d-simulator"
+          class="bg-brandDarkCard p-8 rounded-3xl neo-border space-y-6"
+        >
+          <div
+            class="flex flex-wrap justify-between items-center pb-4 border-b border-brandDarkBorder gap-3"
+          >
+            <div>
+              <span class="font-mono text-xs font-bold text-brandBlue uppercase"
+                >VERIFIKASI LKPD AKTIVITAS 2</span
+              >
+              <h2
+                class="text-2xl sm:text-3xl font-black text-white font-display"
+              >
+                Kasus D: Fitur Undo (Ctrl+Z) Microsoft Word
+              </h2>
+            </div>
+            <span class="pill-blue px-3.5 py-1 text-xs font-mono"
+              >Prinsip Stack LIFO</span
+            >
+          </div>
+
+          <div
+            class="p-4 bg-brandDark rounded-2xl neo-border text-xs text-slate-300 leading-relaxed"
+          >
+            <strong>Skenario Kasus D:</strong> Andi mengetik kata
+            <code>"INFORMATIKA"</code> $\rightarrow$ salah ketik
+            <code>"INFORMATIKU"</code> $\rightarrow$ menekan
+            <code>Ctrl+Z</code> (Undo) $\rightarrow$ menambah kata
+            <code>"SERU"</code> menjadi <code>"INFORMATIKA SERU"</code>.
+          </div>
+
+          <!-- Lembar Word & Stack Monitor -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div
+              class="lg:col-span-7 bg-brandDark p-6 rounded-3xl neo-border space-y-4"
+            >
+              <!-- Toolbar Word Tiruan -->
+              <div
+                class="flex justify-between items-center pb-3 border-b border-brandDarkBorder text-xs font-mono"
+              >
+                <span class="text-brandBlue font-bold"
+                  ><i class="fa-solid fa-file-word mr-1.5"></i>
+                  DokumenTugas.docx</span
+                >
+                <span
+                  id="badgeWordStep"
+                  class="pill-gold px-2.5 py-0.5 text-[10px]"
+                  >Langkah 1: Kata Dasar</span
+                >
+              </div>
+
+              <!-- Lembar Kertas Putih -->
+              <div
+                class="p-8 bg-white rounded-2xl min-h-[140px] flex items-center justify-center text-center shadow-inner"
+              >
+                <span
+                  id="screenWordText"
+                  class="font-mono text-3xl font-black text-slate-900 tracking-wider"
+                >
+                  INFORMATIKA
+                </span>
+              </div>
+
+              <!-- 4 Tombol Skenario Cukup Klik -->
+              <div class="grid grid-cols-2 gap-2.5 pt-2">
+                <button
+                  onclick="clickWordStep(2)"
+                  class="btn-outline text-xs py-2.5"
+                >
+                  1. Salah Ketik "INFORMATIKU"
+                </button>
+                <button
+                  onclick="clickWordStep(3)"
+                  class="btn-blue text-xs py-2.5"
+                >
+                  <i class="fa-solid fa-rotate-left mr-1"></i> 2. Tekan Undo
+                  (Ctrl+Z)
+                </button>
+                <button
+                  onclick="clickWordStep(4)"
+                  class="btn-primary text-xs py-2.5 col-span-2"
+                >
+                  3. Tambah Kata "SERU" (Selesai)
+                </button>
+              </div>
+            </div>
+
+            <!-- Monitor Stack Memori Word -->
+            <div
+              class="lg:col-span-5 bg-brandDark p-6 rounded-3xl neo-border space-y-4"
+            >
+              <div
+                class="flex justify-between items-center pb-2 border-b border-brandDarkBorder"
+              >
+                <span
+                  class="text-xs font-mono font-bold uppercase text-brandBlue"
+                  >Monitor Stack Undo</span
+                >
+                <span class="text-[10px] font-mono text-slate-400">LIFO</span>
+              </div>
+
+              <div id="wordStackElements" class="space-y-2 py-2 min-h-[160px]">
+                <!-- Stack actions rendered here -->
+              </div>
+
+              <div
+                id="wordStepExplanation"
+                class="p-3 bg-brandDarkCard rounded-xl neo-border text-xs font-mono text-brandGold"
+              >
+                Langkah 1: Teks "INFORMATIKA" tersimpan di dokumen.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- SECTION 6: LKPD INTERAKTIF KELOMPOK                                      -->
+      <!-- ========================================================================= -->
+      <section id="lkpd" class="page-section">
+        <div class="max-w-4xl mx-auto space-y-6">
+          <div
+            class="bg-brandDarkCard rounded-3xl neo-border p-6 md:p-8 shadow-2xl space-y-6"
+          >
+            <!-- Header LKPD -->
+            <div
+              class="flex items-center justify-between pb-3 border-b border-brandDarkBorder"
+            >
+              <div class="flex items-center gap-2">
+                <div
+                  class="w-6 h-6 rounded-md bg-brandGold text-brandDark flex items-center justify-center text-[10px] font-black"
+                >
+                  <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <span
+                  class="text-xs font-extrabold text-white uppercase tracking-wide"
+                  >Informatika Fase E • Kelas X5</span
+                >
+              </div>
+              <span
+                class="text-[10px] font-medium text-slate-400 uppercase tracking-wider"
+                >SMA Negeri 4 Yogyakarta</span
+              >
+            </div>
+
+            <!-- Banner LKPD -->
+            <div
+              class="relative bg-gradient-to-br from-[#111317] to-[#1c2e4a] rounded-2xl p-6 overflow-hidden neo-border"
+            >
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 border border-white/20 rounded-full text-[9px] font-bold tracking-widest uppercase text-brandGold mb-3"
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full bg-brandGold shadow-[0_0_8px_#d4a657]"
+                ></span>
+                LKPD Digital Kolaboratif • RPP Lampiran III
+              </span>
+              <h1
+                class="text-2xl md:text-3xl font-black text-white font-display leading-tight"
+              >
+                Lembar Kerja Peserta Didik (LKPD) Struktur Data
+              </h1>
+              <div
+                class="text-xs font-bold text-brandBlue uppercase tracking-wider mt-2"
+              >
+                Struktur Data Dasar: Array/List, Stack (LIFO), dan Queue (FIFO)
+                • Alokasi 2 × 45 Menit
+              </div>
+            </div>
+
+            <!-- Box Panduan: Tujuan Pembelajaran, Petunjuk & K3 -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <!-- Kolom Kiri: Tujuan & Petunjuk -->
+              <div
+                class="md:col-span-7 bg-brandDark rounded-2xl p-5 neo-border space-y-4"
+              >
+                <div>
+                  <h4
+                    class="text-xs font-black text-brandGold uppercase tracking-wider flex items-center gap-2 mb-2"
+                  >
+                    <i class="fa-solid fa-bullseye text-brandGold"></i>
+                    Tujuan Pembelajaran
+                  </h4>
+                  <ul
+                    class="text-xs text-slate-300 space-y-1.5 leading-relaxed"
+                  >
+                    <li class="flex items-start gap-1.5">
+                      <span class="text-brandGold font-bold">1)</span>
+                      <span
+                        >Murid mampu menganalisis karakteristik dan cara kerja
+                        konsep struktur data standar (<em class="text-white"
+                          >List/Array, Stack, dan Queue</em
+                        >) berdasarkan contoh kasus sehari-hari yang diberikan
+                        secara tepat dan logis. <strong>(C4)</strong></span
+                      >
+                    </li>
+                    <li class="flex items-start gap-1.5">
+                      <span class="text-brandGold font-bold">2)</span>
+                      <span
+                        >Murid mampu merancang solusi penyelesaian persoalan
+                        dengan menerapkan struktur data standar (<em
+                          class="text-white"
+                          >List/Array, Stack, atau Queue</em
+                        >) yang paling tepat berdasarkan studi kasus sehari-hari
+                        yang diberikan secara sistematis dan tepat.
+                        <strong>(C6)</strong></span
+                      >
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="pt-3 border-t border-brandDarkBorder">
+                  <h4
+                    class="text-xs font-black text-brandBlue uppercase tracking-wider flex items-center gap-2 mb-2"
+                  >
+                    <i class="fa-solid fa-clipboard-list text-brandBlue"></i>
+                    Petunjuk Pengerjaan
+                  </h4>
+                  <ol
+                    class="text-xs text-slate-300 space-y-1 list-decimal list-inside leading-relaxed"
+                  >
+                    <li>Bacalah materi ajar dan setiap kasus dengan cermat.</li>
+                    <li>Diskusikan hasil pengamatan bersama kelompok.</li>
+                    <li>
+                      Gunakan <strong>Website Simulasi Interaktif</strong> pada
+                      smartphone kelompokmu untuk membuktikan jawaban pada
+                      Aktivitas 2.
+                    </li>
+                    <li>
+                      Tuliskan jawaban pada kolom yang tersedia dengan rapi.
+                    </li>
+                    <li>Presentasikan hasil kerja kelompok di depan kelas.</li>
+                  </ol>
+                </div>
+              </div>
+
+              <!-- Kolom Kanan: K3 (Keselamatan & Kesehatan Kerja) -->
+              <div
+                class="md:col-span-5 bg-brandDark rounded-2xl p-5 neo-border space-y-3 flex flex-col justify-between"
+              >
+                <div>
+                  <h4
+                    class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-2 mb-2"
+                  >
+                    <i
+                      class="fa-solid fa-triangle-exclamation text-amber-400"
+                    ></i>
+                    Keselamatan &amp; Kesehatan Kerja (K3)
+                  </h4>
+                  <ul class="text-xs text-slate-300 space-y-2 leading-relaxed">
+                    <li class="flex items-start gap-2">
+                      <i
+                        class="fa-solid fa-check text-emerald-400 mt-0.5 text-[10px]"
+                      ></i>
+                      <span
+                        >Duduk tegak dan ergonomis selama pembelajaran
+                        berlangsung.</span
+                      >
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <i
+                        class="fa-solid fa-check text-emerald-400 mt-0.5 text-[10px]"
+                      ></i>
+                      <span
+                        >Pastikan area meja kerja bersih dari makanan dan
+                        minuman.</span
+                      >
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <i
+                        class="fa-solid fa-check text-emerald-400 mt-0.5 text-[10px]"
+                      ></i>
+                      <span
+                        >Tidak menyentuh kabel atau perangkat listrik dengan
+                        tangan basah.</span
+                      >
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <i
+                        class="fa-solid fa-check text-emerald-400 mt-0.5 text-[10px]"
+                      ></i>
+                      <span
+                        >Merapikan kembali posisi kursi dan meja setelah
+                        pembelajaran selesai.</span
+                      >
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <i
+                        class="fa-solid fa-check text-emerald-400 mt-0.5 text-[10px]"
+                      ></i>
+                      <span
+                        >Menggunakan perangkat elektronik (smartphone/laptop)
+                        secara bijak.</span
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <div
+                  class="p-2.5 bg-brandDarkCard rounded-xl border border-brandDarkBorder text-[11px] text-slate-400"
+                >
+                  <i class="fa-solid fa-users text-brandGold mr-1"></i> Format
+                  Kelompok: 4 Orang Heterogen
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Identitas Kelompok -->
+            <div class="bg-brandDark rounded-2xl p-5 neo-border space-y-3">
+              <h3
+                class="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2"
+              >
+                <i class="fa-solid fa-id-card text-brandGold"></i> Identitas
+                Kelompok
+              </h3>
+              <p class="text-[11px] text-slate-400">
+                Tuliskan nama lengkap beserta nomor presensi setiap anggota:
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1"
+                    >Nama Kelompok</label
+                  >
+                  <input
+                    type="text"
+                    id="lkpd-nama-kel"
+                    placeholder="Contoh: Kelompok 1 (Stack)"
+                    class="lkpd-input w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1"
+                    >Fase / Kelas</label
+                  >
+                  <input
+                    type="text"
+                    id="lkpd-kelas-val"
+                    value="E / X5"
+                    class="lkpd-input w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1"
+                    >Anggota 1 &amp; Presensi (Ketua)</label
+                  >
+                  <input
+                    type="text"
+                    id="lkpd-m1-val"
+                    placeholder="Nama Lengkap &amp; Nomor Presensi"
+                    class="lkpd-input w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1"
+                    >Anggota 2 &amp; Presensi</label
+                  >
+                  <input
+                    type="text"
+                    id="lkpd-m2-val"
+                    placeholder="Nama Lengkap &amp; Nomor Presensi"
+                    class="lkpd-input w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1"
+                    >Anggota 3 &amp; Presensi</label
+                  >
+                  <input
+                    type="text"
+                    id="lkpd-m3-val"
+                    placeholder="Nama Lengkap &amp; Nomor Presensi"
+                    class="lkpd-input w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1"
+                    >Anggota 4 &amp; Presensi</label
+                  >
+                  <input
+                    type="text"
+                    id="lkpd-m4-val"
+                    placeholder="Nama Lengkap &amp; Nomor Presensi"
+                    class="lkpd-input w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- AKTIVITAS 1: ANALISIS KASUS A, B, C (C4) -->
+            <div class="pt-4 border-t border-brandDarkBorder space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="pill-gold px-2.5 py-0.5 text-[10px] font-mono"
+                    >TP 1 • C4</span
+                  >
+                  <h3 class="font-extrabold text-white text-base font-display">
+                    Pertemuan 1 — Aktivitas 1: Analisis Karakteristik Struktur
+                    Data
+                  </h3>
+                </div>
+              </div>
+
+              <div
+                class="p-3 bg-brandDark/80 rounded-xl border border-brandDarkBorder text-xs text-slate-300"
+              >
+                <i class="fa-solid fa-circle-info text-brandGold mr-1.5"></i>
+                <strong>Petunjuk:</strong> Bacalah narasi kasus di bawah ini,
+                lalu diskusikan dan tentukan struktur data (<em
+                  >Array/List, Stack, atau Queue</em
+                >) yang paling tepat. Berikan alasan logis kalian!
+              </div>
+
+              <!-- 01 Kasus A -->
+              <div class="p-5 bg-brandDark rounded-2xl neo-border space-y-3">
+                <div class="flex items-center justify-between">
+                  <span
+                    class="inline-flex items-center gap-2 font-mono text-xs font-bold text-brandGold"
+                  >
+                    <span
+                      class="w-5 h-5 rounded-full bg-brandGold/20 text-brandGold text-[10px] flex items-center justify-center font-black"
+                      >01</span
+                    >
+                    Kasus A (Sistem Akademik)
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-mono"
+                    >Tingkat: C4 Analisis</span
+                  >
+                </div>
+                <div
+                  class="p-3 bg-brandDarkCard rounded-xl border border-brandDarkBorder text-xs text-slate-200 leading-relaxed"
+                >
+                  "Sekolah memiliki daftar nama siswa kelas X yang diurutkan
+                  berdasarkan nomor absen dari 1 hingga 36. Guru ingin mencari
+                  data siswa dengan nomor absen 15 secara langsung tanpa harus
+                  membaca dari urutan pertama."
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-mono text-slate-400 mb-1.5 font-bold"
+                    >Struktur Data yang tepat:</label
+                  >
+                  <div
+                    class="flex flex-wrap gap-4 text-xs font-bold font-mono py-1"
+                  >
+                    <label
+                      class="flex items-center gap-2 cursor-pointer text-slate-200 hover:text-white"
+                      ><input
+                        type="radio"
+                        name="ans_kasusA"
+                        value="Array/List"
+                        class="accent-brandGold"
+                      />
+                      Array/List</label
+                    >
+                    <label
+                      class="flex items-center gap-2 cursor-pointer text-slate-200 hover:text-white"
+                      ><input
+                        type="radio"
+                        name="ans_kasusA"
+                        value="Stack"
+                        class="accent-brandGold"
+                      />
+                      Stack</label
+                    >
+                    <label
+                      class="flex items-center gap-2 cursor-pointer text-slate-200 hover:text-white"
+                      ><input
+                        type="radio"
+                        name="ans_kasusA"
+                        value="Queue"
+                        class="accent-brandGold"
+                      />
+                      Queue</label
+                    >
+                  </div>
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-mono text-slate-400 mb-1 font-bold"
+                    >Alasan Logis:</label
+                  >
+                  <textarea
+                    id="reason_kasusA_val"
+                    rows="2"
+                    placeholder="Tuliskan alasan logis mengapa struktur data tersebut dipilih..."
+                    class="lkpd-input w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- 02 Kasus B -->
+              <div class="p-5 bg-brandDark rounded-2xl neo-border space-y-3">
+                <div class="flex items-center justify-between">
+                  <span
+                    class="inline-flex items-center gap-2 font-mono text-xs font-bold text-brandGold"
+                  >
+                    <span
+                      class="w-5 h-5 rounded-full bg-brandGold/20 text-brandGold text-[10px] flex items-center justify-center font-black"
+                      >02</span
+                    >
+                    Kasus B (Aplikasi Peramban)
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-mono"
+                    >Tingkat: C4 Analisis</span
+                  >
+                </div>
+                <div
+                  class="p-3 bg-brandDarkCard rounded-xl border border-brandDarkBorder text-xs text-slate-200 leading-relaxed"
+                >
+                  "Rina sedang membuka browser di komputernya. Ia membuka
+                  halaman Google, lalu YouTube, lalu video tertentu. Saat ia
+                  menekan tombol Back (kembali), ia kembali ke YouTube, lalu
+                  menekan Back lagi hingga kembali ke Google."
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-mono text-slate-400 mb-1.5 font-bold"
+                    >Struktur Data yang tepat:</label
+                  >
+                  <div
+                    class="flex flex-wrap gap-4 text-xs font-bold font-mono py-1"
+                  >
+                    <label
+                      class="flex items-center gap-2 cursor-pointer text-slate-200 hover:text-white"
+                      ><input
+                        type="radio"
+                        name="ans_kasusB"
+                        value="Array/List"
+                        class="accent-brandGold"
+                      />
+                      Array/List</label
+                    >
+                    <label
+                      class="flex items-center gap-2 cursor-pointer text-slate-200 hover:text-white"
+                      ><input
+                        type="radio"
+                        name="ans_kasusB"
+                        value="Stack"
+                        class="accent-brandGold"
+                      />
+                      Stack</label
+                    >
+                    <label
+                      class="flex items-center gap-2 cursor-pointer text-slate-200 hover:text-white"
+                      ><input
+                        type="radio"
+                        name="ans_kasusB"
+                        value="Queue"
+                        class="accent-brandGold"
+                      />
+                      Queue</label
+                    >
+                  </div>
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-mono text-slate-400 mb-1 font-bold"
+                    >Alasan Logis:</label
+                  >
+                  <textarea
+                    id="reason_kasusB_val"
+                    rows="2"
+                    placeholder="Tuliskan alasan logis mengapa struktur data tersebut dipilih..."
+                    class="lkpd-input w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- 03 Kasus C -->
+              <div class="p-5 bg-brandDark rounded-2xl neo-border space-y-3">
+                <div class="flex items-center justify-between">
+                  <span
+                    class="inline-flex items-center gap-2 font-mono text-xs font-bold text-brandGold"
+                  >
+                    <span
+                      class="w-5 h-5 rounded-full bg-brandGold/20 text-brandGold text-[10px] flex items-center justify-center font-black"
+                      >03</span
+                    >
+                    Kasus C (E-Ticketing)
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-mono"
+                    >Tingkat: C4 Analisis</span
+                  >
+                </div>
+                <div
+                  class="p-3 bg-brandDarkCard rounded-xl border border-brandDarkBorder text-xs text-slate-200 leading-relaxed"
+                >
+                  "Sebuah platform penjualan tiket konser musik menerapkan
+                  sistem di mana pembeli yang berhasil masuk ke halaman
+                  pembayaran lebih dulu akan diproses oleh sistem dan
+                  mendapatkan nomor kursi lebih dulu."
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-mono text-slate-400 mb-1.5 font-bold"
+                    >Struktur Data yang tepat:</label
+                  >
+                  <div
+                    class="flex flex-wrap gap-4 text-xs font-bold font-mono py-1"
+                  >
+                    <label
+                      class="flex items-center gap-2 cursor-pointer text-slate-200 hover:text-white"
+                      ><input
+                        type="radio"
+                        name="ans_kasusC"
+                        value="Array/List"
+                        class="accent-brandGold"
+                      />
+                      Array/List</label
+                    >
+                    <label
+                      class="flex items-center gap-2 cursor-pointer text-slate-200 hover:text-white"
+                      ><input
+                        type="radio"
+                        name="ans_kasusC"
+                        value="Stack"
+                        class="accent-brandGold"
+                      />
+                      Stack</label
+                    >
+                    <label
+                      class="flex items-center gap-2 cursor-pointer text-slate-200 hover:text-white"
+                      ><input
+                        type="radio"
+                        name="ans_kasusC"
+                        value="Queue"
+                        class="accent-brandGold"
+                      />
+                      Queue</label
+                    >
+                  </div>
+                </div>
+                <div>
+                  <label
+                    class="block text-[11px] font-mono text-slate-400 mb-1 font-bold"
+                    >Alasan Logis:</label
+                  >
+                  <textarea
+                    id="reason_kasusC_val"
+                    rows="2"
+                    placeholder="Tuliskan alasan logis mengapa struktur data tersebut dipilih..."
+                    class="lkpd-input w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- AKTIVITAS 2: PERANCANGAN KASUS D 5 LANGKAH (C5) -->
+            <div class="pt-4 border-t border-brandDarkBorder space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="pill-blue px-2.5 py-0.5 text-[10px] font-mono"
+                    >TP 2 • C5</span
+                  >
+                  <h3 class="font-extrabold text-white text-base font-display">
+                    Pertemuan 1 — Aktivitas 2: Merancang Solusi Struktur Data
+                  </h3>
+                </div>
+              </div>
+
+              <div
+                class="p-3 bg-brandDark/80 rounded-xl border border-brandDarkBorder text-xs text-slate-300"
+              >
+                <i class="fa-solid fa-circle-info text-brandBlue mr-1.5"></i>
+                <strong>Petunjuk:</strong> Rancanglah langkah-langkah logis
+                (sistematis) untuk menyelesaikan kasus di bawah ini menggunakan
+                struktur data yang tepat. Tuliskan urutan operasinya (<em
+                  >Push / Pop / Enqueue / Dequeue</em
+                >)!
+              </div>
+
+              <!-- Narasi Lengkap Kasus D -->
+              <div class="p-5 bg-brandDark rounded-2xl neo-border space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span
+                    class="font-mono text-xs font-bold text-brandBlue flex items-center gap-2"
+                  >
+                    <i class="fa-solid fa-file-word text-brandBlue"></i>
+                    Kasus D (Sistem Fitur Undo)
+                  </span>
+                  <button
+                    type="button"
+                    onclick="navigasiKeSimulasiWord()"
+                    class="inline-flex items-center gap-1.5 px-3 py-1 bg-brandBlue/20 hover:bg-brandBlue/30 text-brandBlue text-[11px] font-bold rounded-lg border border-brandBlue/40 transition cursor-pointer"
+                  >
+                    <i class="fa-solid fa-desktop text-xs"></i>
+                    Verifikasi dengan Website Simulasi
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                  </button>
+                </div>
+
+                <div
+                  class="p-3.5 bg-brandDarkCard rounded-xl border border-brandDarkBorder text-xs text-slate-200 leading-relaxed space-y-1.5"
+                >
+                  <p>
+                    "Andi sedang mengerjakan tugas mengetik di Microsoft Word.
+                    Ia mengetik kata
+                    <code
+                      class="bg-brandDark px-1.5 py-0.5 rounded text-brandGold font-mono"
+                      >"INFORMATIKA"</code
+                    >. Namun ia salah ketik, sehingga menjadi
+                    <code
+                      class="bg-brandDark px-1.5 py-0.5 rounded text-rose-400 font-mono"
+                      >"INFORMATIKU"</code
+                    >. Ia menekan
+                    <kbd
+                      class="bg-brandDark border border-brandDarkBorder px-1.5 py-0.5 rounded text-brandBlue font-mono"
+                      >ctrl+z</kbd
+                    >
+                    (Undo) sehingga huruf 'U' terhapus dan kembali menjadi 'A'.
+                    Setelah itu ia menambahkan kata
+                    <code
+                      class="bg-brandDark px-1.5 py-0.5 rounded text-emerald-400 font-mono"
+                      >"SERU"</code
+                    >, sehingga menjadi
+                    <code
+                      class="bg-brandDark px-1.5 py-0.5 rounded text-brandGold font-mono"
+                      >"INFORMATIKA SERU"</code
+                    >."
+                  </p>
+                  <p class="text-slate-300 font-medium">
+                    &rarr; Rancanglah langkah-langkah (operasi Push/Pop) yang
+                    terjadi pada sistem penyimpanan riwayat (Stack) dari awal
+                    hingga akhir!
+                  </p>
+                </div>
+
+                <!-- Tabel Input Solusi Sistematis -->
+                <div class="pt-2 space-y-2">
+                  <div
+                    class="grid grid-cols-12 gap-2 text-[11px] font-mono font-bold text-slate-400 px-1"
+                  >
+                    <div class="col-span-2 sm:col-span-1 text-center">No</div>
+                    <div class="col-span-10 sm:col-span-6">
+                      Rancangan Solusi Sistematis (Operasi Push / Pop)
+                    </div>
+                    <div class="hidden sm:block sm:col-span-5">
+                      Status Isi Stack (Bawah &rarr; Atas)
+                    </div>
+                  </div>
+
+                  <!-- Langkah 1 -->
+                  <div class="grid grid-cols-12 gap-2 items-center">
+                    <span
+                      class="col-span-2 sm:col-span-1 font-mono text-xs font-bold text-center text-brandGold bg-brandDarkCard py-2.5 rounded-xl border border-brandDarkBorder"
+                      >L1</span
+                    >
+                    <input
+                      type="text"
+                      id="s1_op_val"
+                      placeholder="Contoh Operasi: Push('INFORMATIKA')"
+                      class="col-span-10 sm:col-span-6 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                    <input
+                      type="text"
+                      id="s1_st_val"
+                      placeholder="Status Stack: ['INFORMATIKA']"
+                      class="col-span-12 sm:col-span-5 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                  </div>
+
+                  <!-- Langkah 2 -->
+                  <div class="grid grid-cols-12 gap-2 items-center">
+                    <span
+                      class="col-span-2 sm:col-span-1 font-mono text-xs font-bold text-center text-brandGold bg-brandDarkCard py-2.5 rounded-xl border border-brandDarkBorder"
+                      >L2</span
+                    >
+                    <input
+                      type="text"
+                      id="s2_op_val"
+                      placeholder="Contoh Operasi: Push('INFORMATIKU')"
+                      class="col-span-10 sm:col-span-6 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                    <input
+                      type="text"
+                      id="s2_st_val"
+                      placeholder="Status Stack: ['INFORMATIKA', 'INFORMATIKU']"
+                      class="col-span-12 sm:col-span-5 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                  </div>
+
+                  <!-- Langkah 3 -->
+                  <div class="grid grid-cols-12 gap-2 items-center">
+                    <span
+                      class="col-span-2 sm:col-span-1 font-mono text-xs font-bold text-center text-brandGold bg-brandDarkCard py-2.5 rounded-xl border border-brandDarkBorder"
+                      >L3</span
+                    >
+                    <input
+                      type="text"
+                      id="s3_op_val"
+                      placeholder="Contoh Operasi: Pop() / Undo huruf 'U'"
+                      class="col-span-10 sm:col-span-6 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                    <input
+                      type="text"
+                      id="s3_st_val"
+                      placeholder="Status Stack: ['INFORMATIKA']"
+                      class="col-span-12 sm:col-span-5 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                  </div>
+
+                  <!-- Langkah 4 -->
+                  <div class="grid grid-cols-12 gap-2 items-center">
+                    <span
+                      class="col-span-2 sm:col-span-1 font-mono text-xs font-bold text-center text-brandGold bg-brandDarkCard py-2.5 rounded-xl border border-brandDarkBorder"
+                      >L4</span
+                    >
+                    <input
+                      type="text"
+                      id="s4_op_val"
+                      placeholder="Contoh Operasi: Push('INFORMATIKA SERU')"
+                      class="col-span-10 sm:col-span-6 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                    <input
+                      type="text"
+                      id="s4_st_val"
+                      placeholder="Status Stack: ['INFORMATIKA', 'INFORMATIKA SERU']"
+                      class="col-span-12 sm:col-span-5 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                  </div>
+
+                  <!-- Langkah 5 -->
+                  <div class="grid grid-cols-12 gap-2 items-center">
+                    <span
+                      class="col-span-2 sm:col-span-1 font-mono text-xs font-bold text-center text-brandGold bg-brandDarkCard py-2.5 rounded-xl border border-brandDarkBorder"
+                      >L5</span
+                    >
+                    <input
+                      type="text"
+                      id="s5_op_val"
+                      placeholder="Contoh Operasi: Status akhir / Selesai"
+                      class="col-span-10 sm:col-span-6 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                    <input
+                      type="text"
+                      id="s5_st_val"
+                      placeholder="Status Stack: ['INFORMATIKA', 'INFORMATIKA SERU']"
+                      class="col-span-12 sm:col-span-5 bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-xs text-white font-mono"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AKTIVITAS 3: REFLEKSI PERTEMUAN 1 -->
+            <div class="pt-4 border-t border-brandDarkBorder space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="pill-gold px-2.5 py-0.5 text-[10px] font-mono"
+                  >Evaluasi Diri</span
+                >
+                <h3 class="font-extrabold text-white text-base font-display">
+                  Aktivitas 3: Refleksi Pertemuan 1
+                </h3>
+              </div>
+
+              <div
+                class="p-3 bg-brandDark/80 rounded-xl border border-brandDarkBorder text-xs text-slate-300"
+              >
+                <i class="fa-solid fa-pen-fancy text-brandGold mr-1.5"></i>
+                <strong>Petunjuk:</strong> Jawablah pertanyaan refleksi berikut
+                untuk mengukur pemahamanmu!
+              </div>
+
+              <div class="space-y-4 text-xs">
+                <div class="p-4 bg-brandDark rounded-2xl neo-border space-y-2">
+                  <label class="block text-slate-200 font-bold"
+                    >01. Apa perbedaan paling mendasar antara Stack dan Queue
+                    yang kamu pelajari hari ini?</label
+                  >
+                  <textarea
+                    id="ref_1_val"
+                    rows="2"
+                    placeholder="Tuliskan jawaban refleksimu di sini..."
+                    class="w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-white text-xs"
+                  ></textarea>
+                </div>
+                <div class="p-4 bg-brandDark rounded-2xl neo-border space-y-2">
+                  <label class="block text-slate-200 font-bold"
+                    >02. Bagian mana yang paling sulit saat merancang solusi
+                    menggunakan struktur data?</label
+                  >
+                  <textarea
+                    id="ref_2_val"
+                    rows="2"
+                    placeholder="Tuliskan kendala atau tantangan yang dihadapi..."
+                    class="w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-white text-xs"
+                  ></textarea>
+                </div>
+                <div class="p-4 bg-brandDark rounded-2xl neo-border space-y-2">
+                  <label class="block text-slate-200 font-bold"
+                    >03. Di mana kamu bisa menemukan penerapan struktur data ini
+                    di kehidupan sehari-hari?</label
+                  >
+                  <textarea
+                    id="ref_3_val"
+                    rows="2"
+                    placeholder="Berikan contoh konkret penerapan yang pernah kamu temui..."
+                    class="w-full bg-brandDarkCard p-2.5 rounded-xl border border-brandDarkBorder text-white text-xs"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tombol Aksi LKPD -->
+            <div
+              class="pt-4 border-t border-brandDarkBorder flex flex-wrap gap-3 justify-end items-center"
+            >
+              <button
+                onclick="simpanDrafLKPD()"
+                class="btn-outline text-xs px-5 py-2.5"
+              >
+                <i class="fa-regular fa-floppy-disk mr-1.5"></i> Simpan Draf
+              </button>
+              <button
+                onclick="unduhPdfLKPD()"
+                class="btn-primary text-xs px-6 py-2.5"
+              >
+                <i class="fa-solid fa-file-pdf mr-1.5"></i> Unduh Berkas PDF
+                LKPD
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- SECTION 7: ASESMEN PRE-TEST & POST-TEST (6 SOAL RESMI DARI LAMPIRAN IV RPP)-->
+      <!-- ========================================================================= -->
+      <section id="asesmen" class="page-section">
+        <div class="max-w-4xl mx-auto">
+          <div
+            class="mb-8 bg-brandDarkCard p-6 md:p-8 rounded-3xl neo-border text-center space-y-2"
+          >
+            <span
+              class="font-mono text-xs font-black text-brandBlue uppercase tracking-wider"
+              >EVALUASI KOMPETENSI RPP LAMPIRAN IV</span
+            >
+            <h2 class="text-3xl font-black text-white font-display">
+              Asesmen Struktur Data
+            </h2>
+            <p class="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
+              Informatika Fase E / Kelas X5 • Standar Kriteria Ketercapaian
+              Tujuan Pembelajaran (KKTP = 75)
+            </p>
+          </div>
+
+          <!-- Tab Selector Asesmen: Pra-Tes vs Pasca-Tes -->
+          <div class="flex flex-wrap gap-3 mb-8 justify-center">
+            <button
+              onclick="pilihTabAsesmen('awal')"
+              id="tab-btn-awal"
+              class="px-6 py-2.5 rounded-full font-black text-xs transition tab-asesmen-active flex items-center gap-2"
+            >
+              <i class="fa-solid fa-pencil"></i> Pra-Tes (Pre-Test)
+            </button>
+            <button
+              onclick="pilihTabAsesmen('akhir')"
+              id="tab-btn-akhir"
+              class="px-6 py-2.5 rounded-full font-black text-xs transition tab-asesmen-inactive flex items-center gap-2"
+            >
+              <i class="fa-solid fa-check-double"></i> Pasca-Tes (Post-Test)
+            </button>
+          </div>
+
+          <!-- KONTEN PRA-TES (PRE-TEST) -->
+          <div id="content-asesmen-awal" class="asesmen-content space-y-6">
+            <div
+              class="bg-brandDarkCard border-l-4 border-brandGold p-5 rounded-r-2xl space-y-1"
+            >
+              <h3 class="font-black text-white text-sm flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-brandGold"></i> Pra-Tes
+                (Asesmen Diagnostik Awal)
+              </h3>
+              <p class="text-xs text-slate-300">
+                6 butir soal pilihan ganda sesuai RPP untuk mengukur baseline
+                kemampuan awal murid. Nilai maksimal: 100 poin (Alokasi: 5
+                Menit).
+              </p>
+            </div>
+
+            <div id="soal-pra-container" class="space-y-4">
+              <!-- 6 Soal Pre-Test rendered here -->
+            </div>
+
+            <div
+              class="bg-brandDarkCard rounded-2xl p-6 border border-brandDarkBorder flex justify-between items-center"
+            >
+              <span id="counter-pra" class="text-xs font-mono text-slate-400"
+                >Terjawab: 0 / 6 Soal</span
+              >
+              <button
+                onclick="submitPraTes()"
+                class="btn-primary text-xs px-6 py-3"
+              >
+                Kirim Jawaban Pra-Tes
+              </button>
+            </div>
+          </div>
+
+          <!-- KONTEN PASCA-TES (POST-TEST) -->
+          <div
+            id="content-asesmen-akhir"
+            class="asesmen-content hidden space-y-6"
+          >
+            <div
+              class="bg-brandDarkCard border-l-4 border-brandBlue p-5 rounded-r-2xl space-y-1"
+            >
+              <h3 class="font-black text-white text-sm flex items-center gap-2">
+                <i class="fa-solid fa-clipboard-check text-brandBlue"></i>
+                Pasca-Tes (Evaluasi Akhir &amp; Gain Score)
+              </h3>
+              <p class="text-xs text-slate-300">
+                6 butir soal pilihan ganda sesuai RPP untuk mengukur peningkatan
+                pemahaman setelah pembelajaran (Alokasi: 10 Menit).
+              </p>
+            </div>
+
+            <!-- Gain Score & Rekomendasi Box -->
+            <div
+              id="gainScoreSummary"
+              class="asesmen-card border-brandGold hidden space-y-4"
+            >
+              <h4 class="font-display font-bold text-lg text-white">
+                Analisis Perkembangan Kompetensi Belajar
+              </h4>
+              <div
+                class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-center"
+              >
+                <div class="p-3 bg-brandDark rounded-xl neo-border">
+                  <span class="text-[10px] text-slate-400 uppercase block"
+                    >Skor Pra-Tes</span
+                  >
+                  <span id="labelScorePra" class="text-xl font-bold text-white"
+                    >0</span
+                  >
+                </div>
+                <div class="p-3 bg-brandDark rounded-xl neo-border">
+                  <span class="text-[10px] text-slate-400 uppercase block"
+                    >Skor Pasca-Tes</span
+                  >
+                  <span
+                    id="labelScorePasca"
+                    class="text-xl font-bold text-brandGold"
+                    >0</span
+                  >
+                </div>
+                <div class="p-3 bg-brandDark rounded-xl neo-border">
+                  <span class="text-[10px] text-slate-400 uppercase block"
+                    >Peningkatan (Gain)</span
+                  >
+                  <span
+                    id="labelScoreGain"
+                    class="text-xl font-bold text-emerald-400"
+                    >+0</span
+                  >
+                </div>
+              </div>
+              <div
+                id="feedbackTindakLanjut"
+                class="p-4 rounded-xl text-xs font-medium leading-relaxed"
+              >
+                <!-- Feedback Remedial / Pengayaan -->
+              </div>
+            </div>
+
+            <div id="soal-pasca-container" class="space-y-4">
+              <!-- 6 Soal Post-Test rendered here -->
+            </div>
+
+            <div
+              class="bg-brandDarkCard rounded-2xl p-6 border border-brandDarkBorder flex justify-between items-center"
+            >
+              <span id="counter-pasca" class="text-xs font-mono text-slate-400"
+                >Terjawab: 0 / 6 Soal</span
+              >
+              <button
+                onclick="submitPascaTes()"
+                class="btn-blue text-xs px-6 py-3"
+              >
+                Kirim Jawaban Pasca-Tes
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer
+      class="mt-16 bg-[#07101e] border-t border-[#1e3252] text-slate-400 py-10"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center gap-6"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 bg-brandGold text-brandDark rounded-xl flex items-center justify-center font-black text-lg neo-border-dark"
+            >
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div>
+              <span class="font-extrabold text-white text-base font-display"
+                >Struktur<span class="text-brandGold italic">Data</span></span
+              >
+              <p class="text-xs text-slate-400">
+                Informatika Fase E &bull; SMA Negeri 4 Yogyakarta
+              </p>
+            </div>
+          </div>
+          <div class="text-center md:text-right text-xs space-y-1 font-mono">
+            <p>
+              Disusun oleh:
+              <span class="text-brandBlue font-bold"
+                >Agasta Pratama Nugraha, S.Kom.</span
+              >
+            </p>
+            <p class="text-slate-500">
+              Kurikulum Merdeka • Problem-Based Learning
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- TOAST POPUP NOTIFIKASI -->
+    <div id="toast">Notifikasi berhasil!</div>
+
+    <!-- ==================== LOGIKA JAVASCRIPT LENGKAP ==================== -->
+    <script>
+      /* 6 SOAL RESMI PRE-TEST & POST-TEST DARI PDF LAMPIRAN IV RPP */
+      const ASESMEN_SOAL_LIST = [
+        {
+          id: 1,
+          tp: "TP 1",
+          level: "C4",
+          tanya:
+            "Sebuah aplikasi pemutar musik menyimpan daftar lagu yang akan diputar. Pengguna dapat memilih lagu untuk diputar berikutnya. Lagu yang dipilih lebih dulu akan diputar lebih dulu. Data lagu tersebut paling tepat disimpan menggunakan struktur data...",
+          opsi: [
+            { k: "A", t: "List" },
+            { k: "B", t: "Stack" },
+            { k: "C", t: "Queue" },
+            { k: "D", t: "Tree" },
+          ],
+          kunci: "C",
+          exp: "Lagu dipilih awal diputar awal: menerapkan prinsip FIFO (Queue).",
+        },
+        {
+          id: 2,
+          tp: "TP 1",
+          level: "C4",
+          tanya:
+            'Perhatikan pernyataan berikut: "Sistem antrean pada layanan customer service memastikan pelanggan yang datang lebih awal mendapatkan pelayanan lebih dulu." Pernyataan tersebut menggambarkan prinsip dari struktur data...',
+          opsi: [
+            { k: "A", t: "Stack" },
+            { k: "B", t: "Array" },
+            { k: "C", t: "Queue" },
+            { k: "D", t: "Graph" },
+          ],
+          kunci: "C",
+          exp: "Pelanggan datang awal dilayani awal adalah prinsip antrean FIFO (Queue).",
+        },
+        {
+          id: 3,
+          tp: "TP 1",
+          level: "C4",
+          tanya:
+            'Fitur "Back" pada browser (kembali ke halaman sebelumnya) paling tepat dimodelkan menggunakan struktur data...',
+          opsi: [
+            { k: "A", t: "Queue (FIFO)" },
+            { k: "B", t: "Stack (LIFO)" },
+            { k: "C", t: "Array (Indeks)" },
+            { k: "D", t: "List (Berurutan)" },
+          ],
+          kunci: "B",
+          exp: "Halaman web terakhir dikunjungi akan dibuka duluan saat tekan Back: prinsip LIFO (Stack).",
+        },
+        {
+          id: 4,
+          tp: "TP 2",
+          level: "C5",
+          tanya:
+            "Andi ingin membuat sistem di mana setiap pengunjung yang datang ke loket akan mendapat nomor urut. Pengunjung pertama mendapat nomor 1 dan akan dipanggil pertama. Jika ada 3 pengunjung (A, B, C), urutan operasi yang benar agar B dapat dilayani setelah A adalah...",
+          opsi: [
+            { k: "A", t: "Push A, Push B, Pop A, Pop B" },
+            { k: "B", t: "Enqueue A, Enqueue B, Dequeue A, Dequeue B" },
+            { k: "C", t: "Push A, Push B, Pop B, Pop A" },
+            { k: "D", t: "Enqueue A, Enqueue B, Dequeue B, Dequeue A" },
+          ],
+          kunci: "B",
+          exp: "Antrean loket menggunakan operasi Enqueue dan Dequeue secara berurutan sesuai kedatangan (FIFO).",
+        },
+        {
+          id: 5,
+          tp: "TP 2",
+          level: "C5",
+          tanya:
+            "Sebuah tumpukan (Stack) berisi angka [1, 2, 3]. Jika kita melakukan operasi Push(4) lalu Pop(), lalu Push(5), maka isi tumpukan dari bawah ke atas sekarang adalah...",
+          opsi: [
+            { k: "A", t: "[1, 2, 4, 5]" },
+            { k: "B", t: "[1, 2, 3, 5]" },
+            { k: "C", t: "[1, 2, 5]" },
+            { k: "D", t: "[1, 2, 4]" },
+          ],
+          kunci: "B",
+          exp: "[1, 2, 3] -> Push(4) jadi [1, 2, 3, 4] -> Pop() mengeluarkan 4 jadi [1, 2, 3] -> Push(5) jadi [1, 2, 3, 5].",
+        },
+        {
+          id: 6,
+          tp: "TP 2",
+          level: "C5",
+          tanya:
+            'Seorang programmer ingin membuat fitur "Batalkan Langkah" (Undo) yang memungkinkan pengguna kembali ke langkah sebelumnya secara berurutan. Struktur data yang paling efisien untuk merancang fitur ini adalah...',
+          opsi: [
+            { k: "A", t: "Array" },
+            { k: "B", t: "Queue" },
+            { k: "C", t: "Stack" },
+            { k: "D", t: "List" },
+          ],
+          kunci: "C",
+          exp: "Fitur Undo membutuhkan pembatalan mundur dari aksi paling terakhir (LIFO / Stack).",
+        },
+      ];
+
+      /* NAVIGASI SINGLE PAGE APPLICATION */
+      function navigateTo(targetSec) {
+        document
+          .querySelectorAll(".page-section")
+          .forEach((s) => s.classList.remove("active"));
+        const el = document.getElementById(targetSec);
+        if (el) {
+          el.classList.add("active");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        document.querySelectorAll(".nav-btn").forEach((btn) => {
+          if (btn.getAttribute("data-nav") === targetSec)
+            btn.classList.add("nav-active");
+          else btn.classList.remove("nav-active");
+        });
+      }
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-nav]");
+        if (btn) {
+          e.preventDefault();
+          navigateTo(btn.getAttribute("data-nav"));
+          document.getElementById("mobile-menu").classList.add("hidden");
+        }
+      });
+
+      document
+        .getElementById("mobile-menu-btn")
+        .addEventListener("click", () => {
+          document.getElementById("mobile-menu").classList.toggle("hidden");
+        });
+
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 3000);
+      }
+
+      /* TABS MODUL MATERI */
+      function showModulTopik(topikId) {
+        document
+          .querySelectorAll(".modul-pane")
+          .forEach((p) => p.classList.add("hidden"));
+        document.getElementById("modul-" + topikId).classList.remove("hidden");
+
+        document.querySelectorAll(".modul-tab").forEach((b) => {
+          b.className =
+            "modul-tab w-full text-left px-4 py-3 rounded-2xl font-bold text-sm text-slate-300 hover:bg-brandDark hover:text-white transition flex items-center gap-2.5";
+        });
+        document.getElementById("tab-" + topikId).className =
+          "modul-tab w-full text-left px-4 py-3 rounded-2xl font-bold text-sm text-brandDark bg-brandGold transition flex items-center gap-2.5";
+      }
+
+      /* ==========================================================
+         SIMULATOR 1: TUMPUKAN STACK (KLIK TANPA KETIK)
+         ========================================================== */
+      let stackItems = [];
+
+      function renderStackUi() {
+        const rack = document.getElementById("stackPlateRack");
+        const empty = document.getElementById("stackEmptyState");
+        const indicator = document.getElementById("topArrowIndicator");
+        rack.innerHTML = "";
+
+        document.getElementById("stackTotalCount").textContent =
+          stackItems.length;
+
+        if (stackItems.length === 0) {
+          empty.classList.remove("hidden");
+          indicator.classList.add("hidden");
+          document.getElementById("stackTopLabel").textContent = "—";
+        } else {
+          empty.classList.add("hidden");
+          indicator.classList.remove("hidden");
+
+          const topObj = stackItems[stackItems.length - 1];
+          document.getElementById("stackTopLabel").textContent = topObj.name;
+
+          stackItems.forEach((obj, idx) => {
+            const isTop = idx === stackItems.length - 1;
+            const div = document.createElement("div");
+            div.className = `item-stack-plate w-full ${obj.cls} ${isTop ? "anim-pop-in neo-border" : "opacity-90"}`;
+            div.innerHTML = `
+              <span>${obj.name}</span>
+              ${isTop ? '<span class="text-[9px] uppercase px-1.5 py-0.5 rounded bg-brandDark text-brandGold font-mono">TOP (LIFO)</span>' : ""}
+            `;
+            rack.appendChild(div);
+          });
+        }
+      }
+
+      function pushPresetItem(name, styleCls) {
+        if (stackItems.length >= 7) {
+          showToast("Rak tumpukan sudah penuh! Ambil piring teratas dulu.");
+          return;
+        }
+        stackItems.push({ name: name, cls: styleCls });
+        document.getElementById("stackLiveNarrative").innerHTML = `
+          📥 <strong>Push:</strong> ${name} ditaruh di puncak tumpukan (paling atas).
+        `;
+        renderStackUi();
+      }
+
+      function pushCustomStack() {
+        const inp = document.getElementById("customStackInput");
+        const val = inp.value.trim();
+        if (!val) {
+          showToast("Ketik nama objek yang ingin di-Push!");
+          return;
+        }
+        pushPresetItem(val, "border-brandGold bg-brandDark text-white");
+        inp.value = "";
+      }
+
+      function popStackItem() {
+        if (stackItems.length === 0) {
+          showToast("Tumpukan kosong! Tidak ada objek yang bisa di-Pop.");
+          return;
+        }
+        const popped = stackItems.pop();
+        document.getElementById("stackLastPoppedLabel").textContent =
+          popped.name;
+        document.getElementById("stackLiveNarrative").innerHTML = `
+          📤 <strong>Pop:</strong> ${popped.name} (paling atas) berhasil diambil keluar!
+        `;
+        renderStackUi();
+      }
+
+      function resetStackSim() {
+        stackItems = [];
+        document.getElementById("stackLastPoppedLabel").textContent = "—";
+        document.getElementById("stackLiveNarrative").textContent =
+          "Rak tumpukan dikosongkan.";
+        renderStackUi();
+      }
+
+      function runAutoTracingBukuStack() {
+        resetStackSim();
+        const steps = [
+          {
+            op: "push",
+            name: "Angka 5",
+            c: "border-brandGold bg-brandGold/20 text-brandGold",
+          },
+          {
+            op: "push",
+            name: "Angka 3",
+            c: "border-brandBlue bg-brandBlue/20 text-brandBlue",
+          },
+          {
+            op: "push",
+            name: "Angka 2",
+            c: "border-emerald-500 bg-emerald-500/20 text-emerald-300",
+          },
+          {
+            op: "push",
+            name: "Angka 4",
+            c: "border-rose-500 bg-rose-500/20 text-rose-300",
+          },
+          { op: "pop" },
+          {
+            op: "push",
+            name: "Angka 6",
+            c: "border-brandGold bg-brandGold/20 text-brandGold",
+          },
+          { op: "pop" },
+          { op: "pop" },
+          { op: "pop" },
+        ];
+
+        let i = 0;
+        const timer = setInterval(() => {
+          if (i >= steps.length) {
+            clearInterval(timer);
+            showToast(
+              "Simulasi Tracing Buku Siswa Selesai! Angka keluar: 4, 6, 2, 3 (tersisa 5).",
+            );
+            return;
+          }
+          const s = steps[i];
+          if (s.op === "push") {
+            stackItems.push({ name: s.name, cls: s.c });
+            document.getElementById("stackLiveNarrative").textContent =
+              `Langkah ${i + 1}: Push ${s.name}`;
+          } else {
+            const out = stackItems.pop();
+            document.getElementById("stackLastPoppedLabel").textContent =
+              out.name;
+            document.getElementById("stackLiveNarrative").textContent =
+              `Langkah ${i + 1}: Pop mengeluarkan ${out.name}`;
+          }
+          renderStackUi();
+          i++;
+        }, 700);
+      }
+
+      /* ==========================================================
+         SIMULATOR 2: ANTREAN QUEUE (KLIK TANPA KETIK)
+         ========================================================== */
+      let queueItems = [];
+
+      function renderQueueUi() {
+        const track = document.getElementById("queueStudentsTrack");
+        const empty = document.getElementById("queueEmptyState");
+        track.innerHTML = "";
+
+        document.getElementById("queueTotalCount").textContent =
+          queueItems.length + " Siswa";
+
+        if (queueItems.length === 0) {
+          empty.classList.remove("hidden");
+          document.getElementById("queueFrontLabel").textContent = "—";
+          document.getElementById("queueRearLabel").textContent = "—";
+        } else {
+          empty.classList.add("hidden");
+          document.getElementById("queueFrontLabel").textContent =
+            queueItems[0].name;
+          document.getElementById("queueRearLabel").textContent =
+            queueItems[queueItems.length - 1].name;
+
+          queueItems.forEach((st, idx) => {
+            const isFront = idx === 0;
+            const isRear = idx === queueItems.length - 1;
+            const card = document.createElement("div");
+            card.className = `item-queue-person shrink-0 bg-brandDark neo-border p-3 ${isFront ? "border-brandBlue neo-shadow" : ""}`;
+            card.innerHTML = `
+              <div class="w-10 h-10 rounded-full ${st.badgeCls} flex items-center justify-center font-bold text-sm mx-auto mb-1">
+                <i class="fa-solid fa-user-graduate"></i>
+              </div>
+              <span class="text-[11px] text-white font-bold block truncate max-w-[85px]">${st.name}</span>
+              <span class="text-[8px] font-mono text-slate-400 mt-1 uppercase">${isFront ? "FRONT" : isRear ? "REAR" : "KE-" + (idx + 1)}</span>
+            `;
+            track.appendChild(card);
+          });
+        }
+      }
+
+      function enqueuePresetStudent(name, badgeCls) {
+        if (queueItems.length >= 6) {
+          showToast(
+            "Antrean kantin sudah panjang! Layani siswa terdepan dulu.",
+          );
+          return;
+        }
+        queueItems.push({ name: name, badgeCls: badgeCls });
+        document.getElementById("queueLiveNarrative").innerHTML = `
+          🚶‍♂️ <strong>Enqueue:</strong> ${name} datang dan berbaris di belakang (Rear).
+        `;
+        renderQueueUi();
+      }
+
+      function enqueueCustomStudent() {
+        const inp = document.getElementById("customQueueInput");
+        const val = inp.value.trim();
+        if (!val) {
+          showToast("Ketik nama siswa yang ingin mengantre!");
+          return;
+        }
+        enqueuePresetStudent(val, "bg-brandBlue text-brandDark");
+        inp.value = "";
+      }
+
+      function dequeueStudentItem() {
+        if (queueItems.length === 0) {
+          showToast("Antrean kosong! Tidak ada siswa yang mengantre.");
+          return;
+        }
+        const served = queueItems.shift();
+        document.getElementById("queueLiveNarrative").innerHTML = `
+          🍲 <strong>Dequeue:</strong> ${served.name} (paling depan) selesai dilayani dan menerima makanan!
+        `;
+        renderQueueUi();
+      }
+
+      function resetQueueSim() {
+        queueItems = [];
+        document.getElementById("queueLiveNarrative").textContent =
+          "Antrean dikosongkan.";
+        renderQueueUi();
+      }
+
+      function runAutoTracingBukuQueue() {
+        resetQueueSim();
+        const steps = [
+          { op: "enq", name: "Antrean 5", c: "bg-brandGold text-brandDark" },
+          { op: "enq", name: "Antrean 3", c: "bg-brandBlue text-brandDark" },
+          { op: "deq" },
+          { op: "enq", name: "Antrean 4", c: "bg-emerald-400 text-brandDark" },
+          { op: "deq" },
+        ];
+
+        let idx = 0;
+        const timer = setInterval(() => {
+          if (idx >= steps.length) {
+            clearInterval(timer);
+            showToast(
+              "Simulasi Tracing Queue Selesai! Elemen keluar urut 5 lalu 3.",
+            );
+            return;
+          }
+          const s = steps[idx];
+          if (s.op === "enq") {
+            queueItems.push({ name: s.name, badgeCls: s.c });
+            document.getElementById("queueLiveNarrative").textContent =
+              `Langkah ${idx + 1}: Enqueue ${s.name}`;
+          } else {
+            const out = queueItems.shift();
+            document.getElementById("queueLiveNarrative").textContent =
+              `Langkah ${idx + 1}: Dequeue mengeluarkan ${out.name}`;
+          }
+          renderQueueUi();
+          idx++;
+        }, 750);
+      }
+
+      /* ==========================================================
+         SIMULATOR 3: ARRAY LOKER SEKOLAH (DIRECT ACCESS)
+         ========================================================== */
+      let lockersData = [
+        { item: "Laptop Pelajar", icon: "fa-laptop", open: false },
+        { item: "Buku Informatika", icon: "fa-book", open: false },
+        { item: "Bola Basket", icon: "fa-basketball", open: false },
+        { item: "Tas Ransel", icon: "fa-bag-shopping", open: false },
+        { item: "Kotak Sepatu", icon: "fa-shoe-prints", open: false },
+      ];
+
+      function renderLockersUi() {
+        const row = document.getElementById("lockersRowUi");
+        row.innerHTML = "";
+
+        lockersData.forEach((loc, i) => {
+          const div = document.createElement("div");
+          div.className = `p-4 bg-brandDark rounded-2xl neo-border flex flex-col justify-between items-center text-center transition ${loc.open ? "border-brandGold neo-shadow-gold" : ""}`;
+          div.innerHTML = `
+            <div class="w-full flex justify-between items-center pb-2 border-b border-brandDarkBorder text-xs font-mono">
+              <span class="text-brandGold font-bold">Loker [${i}]</span>
+              <span class="text-[9px] uppercase px-1.5 py-0.5 rounded ${loc.open ? "bg-emerald-950 text-emerald-300" : "bg-brandDarkCard text-slate-400"}">${loc.open ? "Terbuka" : "Terkunci"}</span>
+            </div>
+
+            <div class="my-4 h-16 flex items-center justify-center">
+              ${
+                loc.open
+                  ? `<div class="animate-bounce text-brandGold"><i class="fa-solid ${loc.icon} text-3xl"></i><span class="block text-xs font-mono mt-1 font-bold text-white">${loc.item}</span></div>`
+                  : `<div class="text-slate-600"><i class="fa-solid fa-lock text-3xl"></i></div>`
+              }
+            </div>
+
+            <button onclick="toggleLockerItem(${i})" class="w-full btn-outline text-xs py-1.5">
+              ${loc.open ? "Tutup Loker" : "Buka Loker [" + i + "]"}
+            </button>
+          `;
+          row.appendChild(div);
+        });
+      }
+
+      function toggleLockerItem(idx) {
+        lockersData[idx].open = !lockersData[idx].open;
+        renderLockersUi();
+        const l = lockersData[idx];
+        document.getElementById("lockerStatusFeedback").innerHTML = `
+          🔑 <strong>Akses Langsung O(1):</strong> Kamu langsung membuka <code>Loker [${idx}]</code> berisi <strong>${l.item}</strong> tanpa harus membuka loker lain terlebih dahulu!
+        `;
+      }
+
+      /* ==========================================================
+         SIMULATOR 4: KASUS D WORD UNDO REALISTIS
+         ========================================================== */
+      const wordStepScenarios = {
+        1: {
+          text: "INFORMATIKA",
+          stack: ["Aksi 1: Ketik 'INFORMATIKA'"],
+          badge: "Langkah 1: Kata Awal",
+          exp: "Aksi awal 'INFORMATIKA' disimpan ke riwayat dokumen (Push).",
+        },
+        2: {
+          text: "INFORMATIKU",
+          stack: [
+            "Aksi 1: Ketik 'INFORMATIKA'",
+            "Aksi 2: Salah ketik 'U' ('INFORMATIKU')",
+          ],
+          badge: "Langkah 2: Salah Ketik",
+          exp: "Aksi salah ketik 'U' di-Push ke puncak Stack riwayat.",
+        },
+        3: {
+          text: "INFORMATIKA",
+          stack: ["Aksi 1: Ketik 'INFORMATIKA'"],
+          badge: "Langkah 3: Undo (Ctrl+Z)",
+          exp: "Tombol Undo ditekan! Aksi salah ketik 'U' dikeluarkan (Pop) dari Stack sehingga huruf 'U' hilang dan kembali ke 'INFORMATIKA'.",
+        },
+        4: {
+          text: "INFORMATIKA SERU",
+          stack: ["Aksi 1: Ketik 'INFORMATIKA'", "Aksi 3: Tambah 'SERU'"],
+          badge: "Langkah 4: Hasil Selesai",
+          exp: "Andi mengetik kata 'SERU'. Aksi baru di-Push ke atas stack. Hasil: 'INFORMATIKA SERU'.",
+        },
+      };
+
+      function clickWordStep(step) {
+        const s = wordStepScenarios[step];
+        if (!s) return;
+        document.getElementById("screenWordText").textContent = s.text;
+        document.getElementById("badgeWordStep").textContent = s.badge;
+        document.getElementById("wordStepExplanation").innerHTML =
+          `💡 <strong>Analisis:</strong> ${s.exp}`;
+
+        const stackBox = document.getElementById("wordStackElements");
+        stackBox.innerHTML = "";
+        s.stack.forEach((st, i) => {
+          const isTop = i === s.stack.length - 1;
+          const d = document.createElement("div");
+          d.className = `p-2.5 rounded-xl font-mono text-xs flex justify-between items-center ${isTop ? "bg-brandGold text-brandDark font-bold neo-shadow" : "bg-brandDarkCard text-slate-300 neo-border"}`;
+          d.innerHTML = `<span>${st}</span> ${isTop ? '<span class="text-[8px] bg-brandDark text-brandGold px-1.5 py-0.5 rounded font-bold">TOP (LIFO)</span>' : ""}`;
+          stackBox.prepend(d);
+        });
+      }
+
+      /* ==========================================================
+         ASESMEN PRA-TES & PASCA-TES PERSIS WEB OS
+         ========================================================== */
+      function pilihTabAsesmen(tab) {
+        document
+          .getElementById("content-asesmen-awal")
+          .classList.toggle("hidden", tab !== "awal");
+        document
+          .getElementById("content-asesmen-akhir")
+          .classList.toggle("hidden", tab !== "akhir");
+
+        const btnAwal = document.getElementById("tab-btn-awal");
+        const btnAkhir = document.getElementById("tab-btn-akhir");
+        if (tab === "awal") {
+          btnAwal.className =
+            "px-6 py-2.5 rounded-full font-black text-xs transition tab-asesmen-active flex items-center gap-2";
+          btnAkhir.className =
+            "px-6 py-2.5 rounded-full font-black text-xs transition tab-asesmen-inactive flex items-center gap-2";
+        } else {
+          btnAkhir.className =
+            "px-6 py-2.5 rounded-full font-black text-xs transition tab-asesmen-active flex items-center gap-2";
+          btnAwal.className =
+            "px-6 py-2.5 rounded-full font-black text-xs transition tab-asesmen-inactive flex items-center gap-2";
+        }
+      }
+
+      function renderAsesmenCards(type, containerId) {
+        const wrap = document.getElementById(containerId);
+        wrap.innerHTML = "";
+
+        ASESMEN_SOAL_LIST.forEach((q, idx) => {
+          const card = document.createElement("div");
+          card.className = "asesmen-card space-y-3";
+          let optsHtml = "";
+          q.opsi.forEach((opt) => {
+            optsHtml += `
+              <label class="option-label">
+                <input type="radio" name="${type}_soal_${q.id}" value="${opt.k}" onchange="updateAsesmenCounter('${type}')">
+                <span class="text-xs text-slate-200"><strong class="font-mono text-brandGold mr-1.5">${opt.k}.</strong> ${opt.t}</span>
+              </label>
+            `;
+          });
+
+          card.innerHTML = `
+            <div class="flex justify-between items-center pb-2 border-b border-brandDarkBorder">
+              <span class="font-mono text-xs font-bold text-brandGold">Soal Nomor ${idx + 1}</span>
+              <span class="font-mono text-[10px] bg-brandDark px-2.5 py-0.5 rounded text-slate-300 border border-brandDarkBorder">${q.level} • ${q.tp}</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">${q.tanya}</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+              ${optsHtml}
+            </div>
+          `;
+          wrap.appendChild(card);
+        });
+      }
+
+      function updateAsesmenCounter(type) {
+        let count = 0;
+        ASESMEN_SOAL_LIST.forEach((q) => {
+          if (
+            document.querySelector(`input[name="${type}_soal_${q.id}"]:checked`)
+          )
+            count++;
+        });
+        document.getElementById(`counter-${type}`).textContent =
+          `Terjawab: ${count} / ${ASESMEN_SOAL_LIST.length} Soal`;
+      }
+
+      function submitPraTes() {
+        let correct = 0;
+        let answered = 0;
+        ASESMEN_SOAL_LIST.forEach((q) => {
+          const sel = document.querySelector(
+            `input[name="pra_soal_${q.id}"]:checked`,
+          );
+          if (sel) {
+            answered++;
+            if (sel.value === q.kunci) correct++;
+          }
+        });
+
+        if (answered < ASESMEN_SOAL_LIST.length) {
+          if (
+            !confirm(
+              `Kamu baru menjawab ${answered} dari ${ASESMEN_SOAL_LIST.length} soal. Kumpulkan sekarang?`,
+            )
+          )
+            return;
+        }
+
+        const score = Math.round((correct / ASESMEN_SOAL_LIST.length) * 100);
+        localStorage.setItem("score_pra_val", score);
+        document.getElementById("labelScorePra").textContent = score;
+        showToast(`Pra-Tes terkirim! Skor awalmu: ${score}`);
+      }
+
+      function submitPascaTes() {
+        let correct = 0;
+        let answered = 0;
+        ASESMEN_SOAL_LIST.forEach((q) => {
+          const sel = document.querySelector(
+            `input[name="pasca_soal_${q.id}"]:checked`,
+          );
+          if (sel) {
+            answered++;
+            if (sel.value === q.kunci) correct++;
+          }
+        });
+
+        if (answered < ASESMEN_SOAL_LIST.length) {
+          if (
+            !confirm(
+              `Kamu baru menjawab ${answered} dari ${ASESMEN_SOAL_LIST.length} soal. Kumpulkan sekarang?`,
+            )
+          )
+            return;
+        }
+
+        const score = Math.round((correct / ASESMEN_SOAL_LIST.length) * 100);
+        localStorage.setItem("score_pasca_val", score);
+
+        const savedPra = localStorage.getItem("score_pra_val");
+        const praVal = savedPra !== null ? parseInt(savedPra) : 0;
+        const gain = score - praVal;
+
+        document.getElementById("labelScorePra").textContent = praVal;
+        document.getElementById("labelScorePasca").textContent = score;
+        document.getElementById("labelScoreGain").textContent =
+          (gain >= 0 ? "+" : "") + gain;
+
+        const summary = document.getElementById("gainScoreSummary");
+        const feedback = document.getElementById("feedbackTindakLanjut");
+        summary.classList.remove("hidden");
+
+        if (score >= 75) {
+          feedback.className =
+            "p-4 rounded-xl text-xs font-medium leading-relaxed bg-emerald-950/60 border border-emerald-500/40 text-emerald-200";
+          feedback.innerHTML = `🎉 <strong>Tuntas KKTP (Skor ${score} ≥ 75):</strong> Murid telah mampu menganalisis perbedaan karakteristik struktur data (Array, Stack, Queue) dengan tepat, serta merancang urutan operasi (Push/Pop/Enqueue/Dequeue) secara sistematis dan logis.<br><div class="mt-2 text-white"><strong>Tindak Lanjut (Program Pengayaan):</strong> 1) Menganalisis penerapan struktur data pada sistem antrean online e-commerce atau sistem riwayat browser; 2) Membandingkan efisiensi struktur data untuk kasus nyata; 3) Membuat video penjelasan singkat (durasi 1-2 menit) tentang cara kerja Stack dan Queue di dunia nyata.</div>`;
+        } else {
+          feedback.className =
+            "p-4 rounded-xl text-xs font-medium leading-relaxed bg-amber-950/60 border border-amber-500/40 text-amber-200";
+          feedback.innerHTML = `📖 <strong>Belum Mencapai KKTP (Skor ${score} &lt; 75):</strong> Murid masih perlu memperdalam pemahaman karakteristik LIFO (Stack) vs FIFO (Queue), atau masih keliru dalam merancang urutan operasi (Push/Pop/Enqueue/Dequeue).<br><div class="mt-2 text-white"><strong>Tindak Lanjut (Program Remedial):</strong> 1) Penguatan kembali konsep dasar struktur data dengan contoh analogi konkret (tumpukan piring &amp; antrean loket); 2) Latihan terbimbing mengenali perbedaan Array, Stack, dan Queue; 3) Latihan terbimbing menyusun langkah operasi berurutan dengan pendampingan guru atau tutor sebaya.</div>`;
+        }
+
+        showToast(`Pasca-Tes terkirim! Skor: ${score}`);
+        summary.scrollIntoView({ behavior: "smooth" });
+      }
+
+      function navigasiKeSimulasiWord() {
+        navigateTo("sim-array");
+        setTimeout(() => {
+          const el = document.getElementById("kasus-d-simulator");
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 150);
+      }
+
+      /* ==========================================================
+         LKPD SAVE & PDF EXPORT
+         ========================================================== */
+      function simpanDrafLKPD() {
+        const d = {
+          kelompok: document.getElementById("lkpd-nama-kel").value,
+          kelas: document.getElementById("lkpd-kelas-val").value,
+          m1: document.getElementById("lkpd-m1-val").value,
+          m2: document.getElementById("lkpd-m2-val").value,
+          m3: document.getElementById("lkpd-m3-val").value,
+          m4: document.getElementById("lkpd-m4-val").value,
+          kA:
+            document.querySelector('input[name="ans_kasusA"]:checked')?.value ||
+            "",
+          rA: document.getElementById("reason_kasusA_val").value,
+          kB:
+            document.querySelector('input[name="ans_kasusB"]:checked')?.value ||
+            "",
+          rB: document.getElementById("reason_kasusB_val").value,
+          kC:
+            document.querySelector('input[name="ans_kasusC"]:checked')?.value ||
+            "",
+          rC: document.getElementById("reason_kasusC_val").value,
+          s1_op: document.getElementById("s1_op_val").value,
+          s1_st: document.getElementById("s1_st_val").value,
+          s2_op: document.getElementById("s2_op_val").value,
+          s2_st: document.getElementById("s2_st_val").value,
+          s3_op: document.getElementById("s3_op_val").value,
+          s3_st: document.getElementById("s3_st_val").value,
+          s4_op: document.getElementById("s4_op_val").value,
+          s4_st: document.getElementById("s4_st_val").value,
+          s5_op: document.getElementById("s5_op_val").value,
+          s5_st: document.getElementById("s5_st_val").value,
+          r1: document.getElementById("ref_1_val").value,
+          r2: document.getElementById("ref_2_val").value,
+          r3: document.getElementById("ref_3_val").value,
+        };
+        localStorage.setItem("lkpd_os_styled_data", JSON.stringify(d));
+        showToast("Draf LKPD berhasil disimpan!");
+      }
+
+      function muatDrafLKPD() {
+        const s = localStorage.getItem("lkpd_os_styled_data");
+        if (!s) return;
+        try {
+          const d = JSON.parse(s);
+          if (d.kelompok)
+            document.getElementById("lkpd-nama-kel").value = d.kelompok;
+          if (d.kelas)
+            document.getElementById("lkpd-kelas-val").value = d.kelas;
+          if (d.m1) document.getElementById("lkpd-m1-val").value = d.m1;
+          if (d.m2) document.getElementById("lkpd-m2-val").value = d.m2;
+          if (d.m3) document.getElementById("lkpd-m3-val").value = d.m3;
+          if (d.m4) document.getElementById("lkpd-m4-val").value = d.m4;
+
+          if (d.kA) {
+            const el = document.querySelector(
+              `input[name="ans_kasusA"][value="${d.kA}"]`,
+            );
+            if (el) el.checked = true;
+          }
+          if (d.rA) document.getElementById("reason_kasusA_val").value = d.rA;
+
+          if (d.kB) {
+            const el = document.querySelector(
+              `input[name="ans_kasusB"][value="${d.kB}"]`,
+            );
+            if (el) el.checked = true;
+          }
+          if (d.rB) document.getElementById("reason_kasusB_val").value = d.rB;
+
+          if (d.kC) {
+            const el = document.querySelector(
+              `input[name="ans_kasusC"][value="${d.kC}"]`,
+            );
+            if (el) el.checked = true;
+          }
+          if (d.rC) document.getElementById("reason_kasusC_val").value = d.rC;
+
+          if (d.s1_op) document.getElementById("s1_op_val").value = d.s1_op;
+          if (d.s1_st) document.getElementById("s1_st_val").value = d.s1_st;
+          if (d.s2_op) document.getElementById("s2_op_val").value = d.s2_op;
+          if (d.s2_st) document.getElementById("s2_st_val").value = d.s2_st;
+          if (d.s3_op) document.getElementById("s3_op_val").value = d.s3_op;
+          if (d.s3_st) document.getElementById("s3_st_val").value = d.s3_st;
+          if (d.s4_op) document.getElementById("s4_op_val").value = d.s4_op;
+          if (d.s4_st) document.getElementById("s4_st_val").value = d.s4_st;
+          if (d.s5_op) document.getElementById("s5_op_val").value = d.s5_op;
+          if (d.s5_st) document.getElementById("s5_st_val").value = d.s5_st;
+
+          if (d.r1) document.getElementById("ref_1_val").value = d.r1;
+          if (d.r2) document.getElementById("ref_2_val").value = d.r2;
+          if (d.r3) document.getElementById("ref_3_val").value = d.r3;
+        } catch (e) {}
+      }
+
+      function unduhPdfLKPD() {
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+          alert("Library PDF sedang dimuat...");
+          return;
+        }
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4",
+        });
+
+        const kel =
+          document.getElementById("lkpd-nama-kel").value || "Kelompok Siswa";
+        const kls = document.getElementById("lkpd-kelas-val").value || "X E5";
+        const m1 = document.getElementById("lkpd-m1-val").value || "-";
+        const m2 = document.getElementById("lkpd-m2-val").value || "-";
+        const m3 = document.getElementById("lkpd-m3-val").value || "-";
+        const m4 = document.getElementById("lkpd-m4-val").value || "-";
+
+        // Header Dark Navy
+        doc.setFillColor(17, 19, 23);
+        doc.rect(0, 0, 210, 25, "F");
+        doc.setFillColor(212, 166, 87);
+        doc.rect(0, 25, 210, 2, "F");
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.setTextColor(245, 238, 220);
+        doc.text("LKPD STRUKTUR DATA — SMA NEGERI 4 YOGYAKARTA", 14, 12);
+
+        doc.setFontSize(8.5);
+        doc.setTextColor(56, 189, 248);
+        doc.text("INFORMATIKA FASE E / KELAS X • KURIKULUM MERDEKA", 14, 19);
+
+        // Identitas
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9.5);
+        doc.setTextColor(17, 19, 23);
+        doc.text(`Kelompok: ${kel}  |  Kelas: ${kls}`, 14, 34);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(70, 70, 70);
+        doc.text(`Anggota: 1) ${m1}   2) ${m2}   3) ${m3}   4) ${m4}`, 14, 39);
+
+        // Aktivitas 1
+        const kA =
+          document.querySelector('input[name="ans_kasusA"]:checked')?.value ||
+          "-";
+        const rA = document.getElementById("reason_kasusA_val").value || "-";
+        const kB =
+          document.querySelector('input[name="ans_kasusB"]:checked')?.value ||
+          "-";
+        const rB = document.getElementById("reason_kasusB_val").value || "-";
+        const kC =
+          document.querySelector('input[name="ans_kasusC"]:checked')?.value ||
+          "-";
+        const rC = document.getElementById("reason_kasusC_val").value || "-";
+
+        doc.autoTable({
+          startY: 44,
+          head: [
+            [
+              "Aktivitas 1: Analisis Kasus (TP 1 - C4)",
+              "Pilihan Struktur Data",
+              "Alasan Logis Kelompok",
+            ],
+          ],
+          body: [
+            [
+              "01. Kasus A (Sistem Akademik):\nSekolah memiliki daftar nama siswa kelas X yang diurutkan berdasarkan nomor absen dari 1 hingga 36. Guru ingin mencari data siswa dengan nomor absen 15 secara langsung tanpa harus membaca dari urutan pertama.",
+              kA,
+              rA,
+            ],
+            [
+              "02. Kasus B (Aplikasi Peramban):\nRina sedang membuka browser di komputernya. Ia membuka halaman Google, lalu YouTube, lalu video tertentu. Saat ia menekan tombol Back (kembali), ia kembali ke YouTube, lalu menekan Back lagi hingga kembali ke Google.",
+              kB,
+              rB,
+            ],
+            [
+              "03. Kasus C (E-Ticketing):\nSebuah platform penjualan tiket konser musik menerapkan sistem di mana pembeli yang berhasil masuk ke halaman pembayaran lebih dulu akan diproses oleh sistem dan mendapatkan nomor kursi lebih dulu.",
+              kC,
+              rC,
+            ],
+          ],
+          headStyles: {
+            fillColor: [17, 19, 23],
+            textColor: [212, 166, 87],
+            fontStyle: "bold",
+          },
+          styles: { fontSize: 7, cellPadding: 2.5 },
+          columnStyles: {
+            0: { cellWidth: 95 },
+            1: { cellWidth: 35 },
+            2: { cellWidth: 50 },
+          },
+        });
+
+        // Aktivitas 2
+        doc.autoTable({
+          startY: doc.lastAutoTable.finalY + 5,
+          head: [
+            [
+              "Aktivitas 2: Kasus D Fitur Undo (TP 2 - C5)\nSkenario: Andi mengetik 'INFORMATIKA' -> typo 'INFORMATIKU' -> Undo (Ctrl+Z) -> tambah 'SERU' -> 'INFORMATIKA SERU'.",
+              "Rancangan Solusi Sistematis (Push / Pop)",
+              "Status Isi Stack",
+            ],
+          ],
+          body: [
+            [
+              "Langkah 1",
+              document.getElementById("s1_op_val").value || "-",
+              document.getElementById("s1_st_val").value || "-",
+            ],
+            [
+              "Langkah 2",
+              document.getElementById("s2_op_val").value || "-",
+              document.getElementById("s2_st_val").value || "-",
+            ],
+            [
+              "Langkah 3",
+              document.getElementById("s3_op_val").value || "-",
+              document.getElementById("s3_st_val").value || "-",
+            ],
+            [
+              "Langkah 4",
+              document.getElementById("s4_op_val").value || "-",
+              document.getElementById("s4_st_val").value || "-",
+            ],
+            [
+              "Langkah 5",
+              document.getElementById("s5_op_val").value || "-",
+              document.getElementById("s5_st_val").value || "-",
+            ],
+          ],
+          headStyles: {
+            fillColor: [212, 166, 87],
+            textColor: [17, 19, 23],
+            fontStyle: "bold",
+          },
+          styles: { fontSize: 7.5, cellPadding: 2.5 },
+          columnStyles: {
+            0: { cellWidth: 35 },
+            1: { cellWidth: 75 },
+            2: { cellWidth: 70 },
+          },
+        });
+
+        // Aktivitas 3
+        doc.autoTable({
+          startY: doc.lastAutoTable.finalY + 5,
+          head: [
+            [
+              "Aktivitas 3: Refleksi Pertemuan 1 (Evaluasi Diri)",
+              "Hasil Refleksi Murid",
+            ],
+          ],
+          body: [
+            [
+              "01. Apa perbedaan paling mendasar antara Stack dan Queue yang kamu pelajari hari ini?",
+              document.getElementById("ref_1_val").value || "-",
+            ],
+            [
+              "02. Bagian mana yang paling sulit saat merancang solusi menggunakan struktur data?",
+              document.getElementById("ref_2_val").value || "-",
+            ],
+            [
+              "03. Di mana kamu bisa menemukan penerapan struktur data ini di kehidupan sehari-hari?",
+              document.getElementById("ref_3_val").value || "-",
+            ],
+          ],
+          headStyles: {
+            fillColor: [25, 28, 36],
+            textColor: [56, 189, 248],
+            fontStyle: "bold",
+          },
+          styles: { fontSize: 7.5, cellPadding: 2.5 },
+          columnStyles: {
+            0: { cellWidth: 90 },
+            1: { cellWidth: 90 },
+          },
+        });
+
+        doc.save(`LKPD_StrukturData_${kel.replace(/[^\w\-]+/g, "_")}.pdf`);
+        showToast("Berkas PDF LKPD berhasil diunduh!");
+      }
+
+      /* Inisialisasi awal saat halaman dibuka */
+      window.addEventListener("DOMContentLoaded", () => {
+        renderStackUi();
+        renderQueueUi();
+        renderLockersUi();
+        clickWordStep(1);
+        renderAsesmenCards("pra", "soal-pra-container");
+        renderAsesmenCards("pasca", "soal-pasca-container");
+        muatDrafLKPD();
+
+        const savedPra = localStorage.getItem("score_pra_val");
+        if (savedPra !== null) {
+          document.getElementById("labelScorePra").textContent = savedPra;
+        }
+        const savedPasca = localStorage.getItem("score_pasca_val");
+        if (savedPasca !== null) {
+          const praVal = savedPra !== null ? parseInt(savedPra) : 0;
+          const pascaVal = parseInt(savedPasca);
+          const gain = pascaVal - praVal;
+          document.getElementById("labelScorePasca").textContent = pascaVal;
+          document.getElementById("labelScoreGain").textContent =
+            (gain >= 0 ? "+" : "") + gain;
+          const summary = document.getElementById("gainScoreSummary");
+          const feedback = document.getElementById("feedbackTindakLanjut");
+          if (summary && feedback) {
+            summary.classList.remove("hidden");
+            if (pascaVal >= 75) {
+              feedback.className =
+                "p-4 rounded-xl text-xs font-medium leading-relaxed bg-emerald-950/60 border border-emerald-500/40 text-emerald-200";
+              feedback.innerHTML = `🎉 <strong>Tuntas KKTP (Skor ${pascaVal} ≥ 75):</strong> Murid telah mampu menganalisis perbedaan karakteristik struktur data (Array, Stack, Queue) dengan tepat, serta merancang urutan operasi (Push/Pop/Enqueue/Dequeue) secara sistematis dan logis.<br><div class="mt-2 text-white"><strong>Tindak Lanjut (Program Pengayaan):</strong> 1) Menganalisis penerapan struktur data pada sistem antrean online e-commerce atau sistem riwayat browser; 2) Membandingkan efisiensi struktur data untuk kasus nyata; 3) Membuat video penjelasan singkat (durasi 1-2 menit) tentang cara kerja Stack dan Queue di dunia nyata.</div>`;
+            } else {
+              feedback.className =
+                "p-4 rounded-xl text-xs font-medium leading-relaxed bg-amber-950/60 border border-amber-500/40 text-amber-200";
+              feedback.innerHTML = `📖 <strong>Belum Mencapai KKTP (Skor ${pascaVal} &lt; 75):</strong> Murid masih perlu memperdalam pemahaman karakteristik LIFO (Stack) vs FIFO (Queue), atau masih keliru dalam merancang urutan operasi (Push/Pop/Enqueue/Dequeue).<br><div class="mt-2 text-white"><strong>Tindak Lanjut (Program Remedial):</strong> 1) Penguatan kembali konsep dasar struktur data dengan contoh analogi konkret (tumpukan piring &amp; antrean loket); 2) Latihan terbimbing mengenali perbedaan Array, Stack, dan Queue; 3) Latihan terbimbing menyusun langkah operasi berurutan dengan pendampingan guru atau tutor sebaya.</div>`;
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
